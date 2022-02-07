@@ -4,11 +4,19 @@ public class Entity {
     float health;
     String name;
     int speed;
+    int positionX;
+    int positionY;
 
-    public Entity(float health, String name, int speed) {
+    public Entity(float health, String name, int speed, int positionX, int positionY) {
         this.health = health;
         this.name = name;
         this.speed = speed;
+        this.positionX = positionX;
+        this.positionY = positionY;
+    }
+
+    public Entity(String name) {
+        this.name = name;
     }
 
     public float getHealth() {
@@ -35,4 +43,20 @@ public class Entity {
         this.speed = speed;
     }
 
+    public int getPositionX() {
+        return positionX;
+    }
+
+    public void setPositionX(int positionX) {
+        this.positionX = positionX;
+    }
+
+    public int getPositionY() {
+        return positionY;
+    }
+
+    public void setPositionY(int positionY) {
+        this.positionY = positionY;
+    }
 }
+
