@@ -19,8 +19,8 @@ public class utility {
             Scanner reader = new Scanner(bookList);
             while (reader.hasNextLine()) {
                 String[] bookData = reader.nextLine().split("&");
-                Book book = new Book(bookData[0], bookData[1], bookData[2], bookData[3], bookData[4]);
-                bookArrayList.add(book);
+                //Book book = new Book(bookData[0], bookData[1], bookData[2], bookData[3], bookData[4]);
+                //bookArrayList.add(book);
             }
             return bookArrayList;
         } catch (Exception e) {
@@ -37,9 +37,9 @@ public class utility {
                 String bookData = bookToAdd.toString() + "\n";
                 writer.write(bookData);
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             System.out.println("There was an error" + e);
         }
     }
 }
-}
+

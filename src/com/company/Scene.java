@@ -1,6 +1,6 @@
 package com.company;
 
-import com.company.objects.Entity;
+import com.company.objects.entities.Entity;
 
 import java.awt.*;
 import java.util.ArrayList;

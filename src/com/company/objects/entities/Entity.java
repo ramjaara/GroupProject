@@ -1,4 +1,4 @@
-package com.company.objects;
+package com.company.objects.entities;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -25,7 +25,7 @@ public class Entity {
     public Entity(String name, BufferedImage image) {
         this.name = name;
         this.image = image;
-    }
+    } //the construstor for the protag
 
     public float getHealth() {
         return health;
@@ -68,5 +68,9 @@ public class Entity {
         g.drawImage(image , positionX, positionY, null);
     }
 
+    public void move(int x, int y){
+        this.positionX= this.positionX + x;
+        this.positionY = this.positionY + y;
+    }
 }
 

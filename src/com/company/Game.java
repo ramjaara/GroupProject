@@ -1,7 +1,8 @@
 package com.company;
 
-import com.company.objects.Entity;
-import com.company.objects.Protag;
+import com.company.objects.entities.Enemy;
+import com.company.objects.entities.Entity;
+import com.company.objects.entities.Protag;
 
 import javax.swing.*;
 import java.awt.*;
@@ -16,10 +17,16 @@ public class Game extends JFrame {
     protected List<Entity> entities = new ArrayList<>();
 
     protected Protag player;
-    protected GameController controller;
     protected BufferedImage playerImage;
 
+    protected Enemy enemy;
+    protected BufferedImage enemyImage;
+
+    protected GameController controller;
+
+
     public Game(){
+        // makes the window
         setTitle("Test Scene");
         setDefaultCloseOperation(EXIT_ON_CLOSE);
 
@@ -39,17 +46,27 @@ public class Game extends JFrame {
         setScene();
 
         scene.addEntity(player);
+        scene.addEntity(enemy);
 
         scene.repaint();
     }
 
     public void setScene(){
+        //player
         playerImage = new BufferedImage(32, 32, BufferedImage.TYPE_INT_RGB);
-        Graphics g = playerImage.getGraphics();
-        g.setColor(new Color(255, 0, 255));
-        g.fillRect(0, 0, 32, 32);
+        Graphics playerGraphics = playerImage.getGraphics();
+        playerGraphics.setColor(new Color(255, 0, 255));
+        playerGraphics.fillRect(0, 0, 32, 32);
         player = new Protag("alonso", playerImage);
         player.setPosition(0,0);
+
+        //enemy
+        enemyImage = new BufferedImage(32, 32, BufferedImage.TYPE_INT_RGB);
+        Graphics enemyGraphics = enemyImage.getGraphics();
+        enemyGraphics.setColor(new Color(0, 255, 250));
+        enemyGraphics.fillRect(0, 0, 32, 32);
+        enemy = new Enemy("shifu", enemyImage);
+        enemy.setPosition(500, 500);
     }
 
     public static void main(String[] args) {
@@ -65,21 +82,23 @@ public class Game extends JFrame {
         while (true) {
             timer = System.currentTimeMillis();
             if (controller.up) {
-                player.move(0, -1);
+                player.move(0, -player.getSpeed());
                 System.out.println(player.getPositionX() + "," + player.getPositionY());
             }
             if (controller.down) {
-                player.move(0, 1);
+                player.move(0, player.getSpeed());
                 System.out.println(player.getPositionX() + "," + player.getPositionY());
             }
             if (controller.left) {
-                player.move(-1, 0);
+                player.move(-player.getSpeed(), 0);
                 System.out.println(player.getPositionX() + "," + player.getPositionY());
             }
             if (controller.right) {
-                player.move(1, 0);
+                player.move(player.getSpeed(), 0);
                 System.out.println(player.getPositionX() + "," + player.getPositionY());
             }
+
+            enemy.movement(player.getPositionX(), player.getPositionY());
 
             update_timer -= 1;
 

@@ -1,8 +1,8 @@
-package com.company.objects;
+package com.company.objects.entities;
 
 import java.awt.image.BufferedImage;
 
-public class Protag extends Entity{
+public class Protag extends Entity {
     public Protag(String name, BufferedImage image) {
         super(name, image);
         this.health=(float) 10;
@@ -19,10 +19,4 @@ public class Protag extends Entity{
                 positionX + "&" +
                 positionY;
     }
-
-    public void move(int x, int y){
-        this.positionX= this.positionX + x;
-        this.positionY = this.positionY + y;
-    }
-
 }
