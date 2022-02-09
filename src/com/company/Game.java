@@ -104,6 +104,8 @@ public class Game extends JFrame {
 
             scene.repaint();
 
+
+
             //gives 60fps
             timer = (1000 / 60) - (System.currentTimeMillis() - timer);
 

@@ -6,9 +6,7 @@ public class Protag extends Entity {
     public Protag(String name, BufferedImage image) {
         super(name, image);
         this.health=(float) 10;
-        this.speed = 5;
-        this.positionX = 0;
-        this.positionY = 0;
+        this.speed = 3;
     }
 
     @Override
