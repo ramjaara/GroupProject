@@ -1,22 +1,52 @@
 package com.company;
 
+import com.company.objects.Entity;
 import com.company.objects.Protag;
 
 import javax.swing.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Game extends JFrame {
 
-    protected Protag player = new Protag("alonso");
-    public GameController controller = new GameController();
+    protected Scene scene;
 
-    public static void main(String[] args) {
+    protected List<Entity> entities = new ArrayList<>();
+
+    protected Protag player;
+    protected GameController controller;
+
+    public Game(){
+        setTitle("Test Scene");
+        setDefaultCloseOperation(EXIT_ON_CLOSE);
+
+        scene = new Scene();
+        add(scene);
+        pack();
+
+        setSize(1000, 1000);
+        setVisible(true);
+
         init();
-        Game game = new Game();
-        game.gameLoop();
     }
 
-    public static void init() {
-        System.out.println("initialises game");
+    private void init(){
+        controller = new GameController();
+        addKeyListener(controller);
+        setScene();
+
+        scene.addEntity(player);
+
+        scene.repaint();
+    }
+
+    public void setScene(){
+        player = new Protag("alonso");
+    }
+
+    public static void main(String[] args) {
+        Game game = new Game();
+        game.gameLoop();
     }
 
     public void gameLoop() {

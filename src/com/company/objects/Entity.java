@@ -1,18 +1,25 @@
 package com.company.objects;
 
+import java.awt.*;
+import java.awt.image.BufferedImage;
+
 public class Entity {
     float health;
     String name;
     int speed;
     int positionX;
     int positionY;
+    protected BufferedImage image;
 
-    public Entity(float health, String name, int speed, int positionX, int positionY) {
+    public Entity(float health, String name,
+                  int speed, int positionX, int positionY,
+                  BufferedImage image) {
         this.health = health;
         this.name = name;
         this.speed = speed;
         this.positionX = positionX;
         this.positionY = positionY;
+        this.image = image;
     }
 
     public Entity(String name) {
@@ -47,16 +54,18 @@ public class Entity {
         return positionX;
     }
 
-    public void setPositionX(int positionX) {
-        this.positionX = positionX;
-    }
-
     public int getPositionY() {
         return positionY;
     }
 
-    public void setPositionY(int positionY) {
-        this.positionY = positionY;
+    public void setPosition(int x, int y){
+        this.positionX = x;
+        this.positionY = y;
     }
+
+    public void draw(Graphics g){
+        g.drawImage(image , positionX, positionY, null);
+    }
+
 }
 

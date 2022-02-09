@@ -19,8 +19,7 @@ public class Protag extends Entity{
     }
 
     public void move(int x, int y){
-        setPositionX(getPositionX()+x);
-        setPositionY(getPositionY()+y);
+        setPosition(getPositionX()+x, getPositionY()+y);
     }
 
 }
