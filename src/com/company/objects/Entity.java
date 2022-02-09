@@ -22,8 +22,9 @@ public class Entity {
         this.image = image;
     }
 
-    public Entity(String name) {
+    public Entity(String name, BufferedImage image) {
         this.name = name;
+        this.image = image;
     }
 
     public float getHealth() {
