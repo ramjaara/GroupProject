@@ -27,6 +27,10 @@ public class Entity {
         this.image = image;
     } //the construstor for the protag
 
+    public Entity(){
+
+    }
+
     public float getHealth() {
         return health;
     }

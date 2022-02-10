@@ -14,7 +14,6 @@ public class Scene extends JPanel {
 
     private List<Entity> entities = new ArrayList<>();
 
-
     public Scene() {
         super();
         width = 100;

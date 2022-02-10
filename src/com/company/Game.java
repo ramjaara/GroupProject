@@ -3,9 +3,12 @@ package com.company;
 import com.company.objects.entities.Enemy;
 import com.company.objects.entities.Entity;
 import com.company.objects.entities.Protag;
+import com.company.objects.entities.Cursor;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
@@ -22,7 +25,11 @@ public class Game extends JFrame {
     protected Enemy enemy;
     protected BufferedImage enemyImage;
 
+    protected Cursor cursor;
+    protected BufferedImage cursorImage;
+
     protected GameController controller;
+
 
 
     public Game(){
@@ -43,10 +50,17 @@ public class Game extends JFrame {
     private void init(){
         controller = new GameController();
         addKeyListener(controller);
+        addMouseListener(new MouseAdapter(){
+            @Override
+            public void mouseMoved(MouseEvent e){
+
+            }
+        });
         setScene();
 
         scene.addEntity(player);
         scene.addEntity(enemy);
+        scene.addEntity(cursor);
 
         scene.repaint();
     }
@@ -67,6 +81,14 @@ public class Game extends JFrame {
         enemyGraphics.fillRect(0, 0, 32, 32);
         enemy = new Enemy("shifu", enemyImage);
         enemy.setPosition(500, 500);
+
+        //cursor
+        cursorImage = new BufferedImage(10, 10, BufferedImage.TYPE_INT_RGB);
+        Graphics cursorGraphics = cursorImage.getGraphics();
+        cursorGraphics.setColor(new Color(255, 0, 0));
+        cursorGraphics.fillRect(0, 0, 10, 10);
+        cursor = new Cursor();
+        cursor.setPosition(300, 300);
     }
 
     public static void main(String[] args) {
@@ -81,24 +103,26 @@ public class Game extends JFrame {
 
         while (true) {
             timer = System.currentTimeMillis();
-            if (controller.up) {
+            if (controller.w) {
                 player.move(0, -player.getSpeed());
                 System.out.println(player.getPositionX() + "," + player.getPositionY());
             }
-            if (controller.down) {
+            if (controller.s) {
                 player.move(0, player.getSpeed());
                 System.out.println(player.getPositionX() + "," + player.getPositionY());
             }
-            if (controller.left) {
+            if (controller.a) {
                 player.move(-player.getSpeed(), 0);
                 System.out.println(player.getPositionX() + "," + player.getPositionY());
             }
-            if (controller.right) {
+            if (controller.d) {
                 player.move(player.getSpeed(), 0);
                 System.out.println(player.getPositionX() + "," + player.getPositionY());
             }
 
             enemy.movement(player.getPositionX(), player.getPositionY());
+
+            cursor.setPosition(cursor.getPositionX(), cursor.getPositionY());
 
             update_timer -= 1;
 
