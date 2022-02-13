@@ -2,7 +2,7 @@ package com.company;
 
 import java.awt.event.*;
 
-public class GameController implements KeyListener {
+public class KeyController implements KeyListener{
 
     public boolean up, down, left, right, action_1;
     public boolean w, a, s, d;

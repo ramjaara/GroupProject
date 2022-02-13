@@ -9,72 +9,86 @@ public class Entity {
     int speed;
     int positionX;
     int positionY;
+    int height;
+    int width;
+    Rectangle hitBox = new Rectangle(positionX, positionY,
+            width, height);
     protected BufferedImage image;
 
-    public Entity(float health, String name,
-                  int speed, int positionX, int positionY,
-                  BufferedImage image) {
-        this.health = health;
-        this.name = name;
-        this.speed = speed;
-        this.positionX = positionX;
-        this.positionY = positionY;
-        this.image = image;
-    }
-
-    public Entity(String name, BufferedImage image) {
+    public Entity(String name, BufferedImage image, int width, int height) {
         this.name = name;
         this.image = image;
-    } //the construstor for the protag
-
-    public Entity(){
-
+        this.width = width;
+        this.height = height;
     }
 
-    public float getHealth() {
+        public float getHealth () {
         return health;
     }
 
-    public void setHealth(float health) {
+        public void setHealth ( float health){
         this.health = health;
     }
 
-    public String getName() {
+        public String getName () {
         return name;
     }
 
-    public void setName(String name) {
+        public void setName (String name){
         this.name = name;
     }
 
-    public int getSpeed() {
+        public int getSpeed () {
         return speed;
     }
 
-    public void setSpeed(int speed) {
+        public void setSpeed ( int speed){
         this.speed = speed;
     }
 
-    public int getPositionX() {
+        public int getPositionX () {
         return positionX;
     }
 
-    public int getPositionY() {
+        public int getPositionY () {
         return positionY;
     }
 
-    public void setPosition(int x, int y){
+    public int getHeight() {
+        return height;
+    }
+
+    public void setHeight(int height) {
+        this.height = height;
+    }
+
+    public int getWidth() {
+        return width;
+    }
+
+    public void setWidth(int width) {
+        this.width = width;
+    }
+
+    public void setPosition (int x, int y){
         this.positionX = x;
         this.positionY = y;
     }
 
-    public void draw(Graphics g){
-        g.drawImage(image , positionX, positionY, null);
+        public void draw (Graphics g){
+        g.drawImage(image, positionX, positionY, null);
     }
 
     public void move(int x, int y){
         this.positionX= this.positionX + x;
         this.positionY = this.positionY + y;
+    }
+
+    public boolean hitBoxCrossed(Rectangle otherHitBox){
+        if(hitBox.intersects(otherHitBox)){
+            return true;
+        }
+        return false;
     }
 }
 
