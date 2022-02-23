@@ -7,8 +7,8 @@ public class Bullet extends Entity{
         super(name, positionX, positionY);
         this.direction = direction;
         this.speed = 4;
-        this.width = 10;
-        this.height = 10;
+        this.width = 3;
+        this.height = 3;
     }
 
     public int getDirection() {
