@@ -15,8 +15,8 @@ public class Game extends JFrame {
 
     protected Scene scene;
 
-    //protected static JLabel background;
-    //protected Icon backgroundImage;
+    protected JLabel background;
+    protected BufferedImage backgroundImage;
 
     protected List<Entity> entities = new ArrayList<>();
     protected List<Bullet> bullets = new ArrayList<>();
@@ -60,6 +60,7 @@ public class Game extends JFrame {
 
         setScene();
 
+        healthLable = new JLabel();
         healthLable.setOpaque(true);
 
         scene.add(healthLable);
@@ -70,11 +71,6 @@ public class Game extends JFrame {
     }
 
     public void setScene() {
-        //background init
-        //background.setIcon(backgroundImage);
-        //background.setLayout( new BorderLayout() );
-
-
         //player
         player = new Protag("alonso", 32, 32);
         playerImage = new BufferedImage(player.getWidth(), player.getHeight(), BufferedImage.TYPE_INT_RGB);
@@ -82,7 +78,9 @@ public class Game extends JFrame {
         playerGraphics.setColor(new Color(255, 0, 255));
         playerGraphics.fillRect(0, 0, 32, 32);
         player.setImage(playerImage);
-        player.setPosition(200, 400);
+        player.setPosition(400, 400);
+
+
 
         //enemy
         enemyImage = new BufferedImage(32, 32, BufferedImage.TYPE_INT_RGB);
@@ -98,15 +96,10 @@ public class Game extends JFrame {
         Graphics bulletGraphics = bulletImage.getGraphics();
         bulletGraphics.setColor(new Color(255, 0, 0));
         bulletGraphics.fillRect(0, 0, 10, 10);
-
-        //health dislpay
-
-
     }
 
     public static void main(String[] args) {
         Game game = new Game();
-        //game.setContentPane(background);
         game.gameLoop();
     }
 
