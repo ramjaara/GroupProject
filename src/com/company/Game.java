@@ -15,6 +15,9 @@ public class Game extends JFrame {
 
     protected Scene scene;
 
+    //protected static JLabel background;
+    //protected Icon backgroundImage;
+
     protected List<Entity> entities = new ArrayList<>();
     protected List<Bullet> bullets = new ArrayList<>();
 
@@ -57,11 +60,9 @@ public class Game extends JFrame {
 
         setScene();
 
-        healthLable = new JLabel();
-        JPanel healthPanel = new JPanel();
-        healthPanel.add(healthLable);
+        healthLable.setOpaque(true);
 
-        scene.add(healthPanel);
+        scene.add(healthLable);
         scene.addEntity(player);
         scene.addEntity(enemy);
 
@@ -69,6 +70,11 @@ public class Game extends JFrame {
     }
 
     public void setScene() {
+        //background init
+        //background.setIcon(backgroundImage);
+        //background.setLayout( new BorderLayout() );
+
+
         //player
         player = new Protag("alonso", 32, 32);
         playerImage = new BufferedImage(player.getWidth(), player.getHeight(), BufferedImage.TYPE_INT_RGB);
@@ -76,9 +82,7 @@ public class Game extends JFrame {
         playerGraphics.setColor(new Color(255, 0, 255));
         playerGraphics.fillRect(0, 0, 32, 32);
         player.setImage(playerImage);
-        player.setPosition(400, 400);
-
-        //healthLable.setText(String.valueOf(player.getHealth()));
+        player.setPosition(200, 400);
 
         //enemy
         enemyImage = new BufferedImage(32, 32, BufferedImage.TYPE_INT_RGB);
@@ -94,10 +98,15 @@ public class Game extends JFrame {
         Graphics bulletGraphics = bulletImage.getGraphics();
         bulletGraphics.setColor(new Color(255, 0, 0));
         bulletGraphics.fillRect(0, 0, 10, 10);
+
+        //health dislpay
+
+
     }
 
     public static void main(String[] args) {
         Game game = new Game();
+        //game.setContentPane(background);
         game.gameLoop();
     }
 
@@ -191,6 +200,7 @@ public class Game extends JFrame {
             //cursor.move(mouseController.getMouseLocation().x,
             //        mouseController.getMouseLocation().y);
 
+            //damage
             if (restTimer == 10) {
                 if (player.getHitBox().intersects(enemy.getHitBox())) {
                     player.setHealth((float) (player.getHealth() - 0.5));
@@ -198,6 +208,8 @@ public class Game extends JFrame {
                     System.out.println(player.getHealth());
                 }
             }
+
+            healthLable.setText(String.valueOf(player.getHealth()));
 
             update_timer -= 1;
 
