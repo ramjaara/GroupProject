@@ -139,10 +139,10 @@ public class Game extends JFrame {
                 System.out.println(player.getPositionX() + "," + player.getPositionY());
             }
 
-
             if (keyController.left) {
                 Bullet bullet = new Bullet("bullet" + bulletNumber, player.getPositionX(), player.getPositionY(), 1);
                 bullet.setImage(bulletImage);
+                bullet.setPosition(player.getPositionX()+16, player.getPositionY()+16);
                 bullets.add(bullet);
                 scene.addEntity(bullet);
                 bulletNumber++;
@@ -152,6 +152,7 @@ public class Game extends JFrame {
             if (keyController.up) {
                 Bullet bullet = new Bullet("bullet" + bulletNumber, 100, 100, 2);
                 bullet.setImage(bulletImage);
+                bullet.setPosition(player.getPositionX()+16, player.getPositionY()+16);
                 bullets.add(bullet);
                 scene.addEntity(bullet);
                 bulletNumber++;
@@ -160,6 +161,7 @@ public class Game extends JFrame {
             if (keyController.right) {
                 Bullet bullet = new Bullet("bullet" + bulletNumber, player.getPositionX(), player.getPositionY(), 3);
                 bullet.setImage(bulletImage);
+                bullet.setPosition(player.getPositionX()+16, player.getPositionY()+16);
                 bullets.add(bullet);
                 scene.addEntity(bullet);
                 bulletNumber++;
@@ -168,6 +170,7 @@ public class Game extends JFrame {
             if (keyController.down) {
                 Bullet bullet = new Bullet("bullet" + bulletNumber, player.getPositionX(), player.getPositionY(), 4);
                 bullet.setImage(bulletImage);
+                bullet.setPosition(player.getPositionX()+16, player.getPositionY()+16);
                 bullets.add(bullet);
                 scene.addEntity(bullet);
                 bulletNumber++;
