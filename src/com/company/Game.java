@@ -60,7 +60,7 @@ public class Game extends JFrame {
 
         setScene();
 
-        healthLable = new JLabel();
+        healthLable = new JLabel("");
         healthLable.setOpaque(true);
 
         scene.add(healthLable);
@@ -79,8 +79,6 @@ public class Game extends JFrame {
         playerGraphics.fillRect(0, 0, 32, 32);
         player.setImage(playerImage);
         player.setPosition(400, 400);
-
-
 
         //enemy
         enemyImage = new BufferedImage(32, 32, BufferedImage.TYPE_INT_RGB);
@@ -112,6 +110,8 @@ public class Game extends JFrame {
         while (true) {
             timer = System.currentTimeMillis();
 
+            healthLable.setText(String.valueOf(player.getHealth()));
+
             if (keyController.w) {
                 if (player.getPositionY() > 0) {
                     player.move(0, -player.getSpeed());
@@ -140,19 +140,34 @@ public class Game extends JFrame {
             }
 
             if (keyController.left) {
-                Bullet bullet = new Bullet("bullet" + bulletNumber, player.getPositionX(), player.getPositionY(), 1);
+                if (keyController.up) {
+
+                }if(keyController.down){
+
+                }else{
+                    Bullet bullet = new Bullet("bullet" + bulletNumber, player.getPositionX(), player.getPositionY(), 1);
+                    bullet.setImage(bulletImage);
+                    bullet.setPosition(player.getPositionX() + 16, player.getPositionY() + 16);
+                    bullets.add(bullet);
+                    scene.addEntity(bullet);
+                    bulletNumber++;
+                }
+            }
+
+            /*if (keyController.left || keyController.up) {
+                Bullet bullet = new Bullet("bullet" + bulletNumber, player.getPositionX(), player.getPositionY(), 5);
                 bullet.setImage(bulletImage);
-                bullet.setPosition(player.getPositionX()+16, player.getPositionY()+16);
+                bullet.setPosition(player.getPositionX() + 16, player.getPositionY() + 16);
                 bullets.add(bullet);
                 scene.addEntity(bullet);
                 bulletNumber++;
                 System.out.println(bullets);
-            }
+            }*/
 
             if (keyController.up) {
                 Bullet bullet = new Bullet("bullet" + bulletNumber, 100, 100, 2);
                 bullet.setImage(bulletImage);
-                bullet.setPosition(player.getPositionX()+16, player.getPositionY()+16);
+                bullet.setPosition(player.getPositionX() + 16, player.getPositionY() + 16);
                 bullets.add(bullet);
                 scene.addEntity(bullet);
                 bulletNumber++;
@@ -161,7 +176,7 @@ public class Game extends JFrame {
             if (keyController.right) {
                 Bullet bullet = new Bullet("bullet" + bulletNumber, player.getPositionX(), player.getPositionY(), 3);
                 bullet.setImage(bulletImage);
-                bullet.setPosition(player.getPositionX()+16, player.getPositionY()+16);
+                bullet.setPosition(player.getPositionX() + 16, player.getPositionY() + 16);
                 bullets.add(bullet);
                 scene.addEntity(bullet);
                 bulletNumber++;
@@ -170,42 +185,43 @@ public class Game extends JFrame {
             if (keyController.down) {
                 Bullet bullet = new Bullet("bullet" + bulletNumber, player.getPositionX(), player.getPositionY(), 4);
                 bullet.setImage(bulletImage);
-                bullet.setPosition(player.getPositionX()+16, player.getPositionY()+16);
+                bullet.setPosition(player.getPositionX() + 16, player.getPositionY() + 16);
                 bullets.add(bullet);
                 scene.addEntity(bullet);
                 bulletNumber++;
             }
 
             bullets.forEach((bullet) -> {
+                //left
                 if (bullet.getDirection() == 1) {
                     bullet.move(-bullet.getSpeed(), 0);
                 }
+                //up
                 if (bullet.getDirection() == 2) {
                     bullet.move(0, -bullet.getSpeed());
                 }
+                //right
                 if (bullet.getDirection() == 3) {
                     bullet.move(bullet.getSpeed(), 0);
                 }
+                //down
                 if (bullet.getDirection() == 4) {
                     bullet.move(0, bullet.getSpeed());
+                }
+                if (bullet.getDirection() == 5) {
+                    bullet.move(-bullet.getSpeed(), -bullet.getSpeed());
                 }
             });
 
             enemy.movement(player.getPositionX(), player.getPositionY());
 
-            //cursor.move(mouseController.getMouseLocation().x,
-            //        mouseController.getMouseLocation().y);
-
             //damage
             if (restTimer == 10) {
                 if (player.getHitBox().intersects(enemy.getHitBox())) {
                     player.setHealth((float) (player.getHealth() - 0.5));
-                    System.out.println("DAMAGE");
-                    System.out.println(player.getHealth());
                 }
             }
 
-            healthLable.setText(String.valueOf(player.getHealth()));
 
             update_timer -= 1;
 
