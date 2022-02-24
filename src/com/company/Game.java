@@ -33,7 +33,7 @@ public class Game extends JFrame {
     protected int sceneWidth = 800;
     protected int sceneHeight = 800;
 
-    protected JLabel healthLable;
+    protected JLabel healthLabel;
 
     public Game() {
         // makes the window
@@ -58,10 +58,10 @@ public class Game extends JFrame {
 
         setScene();
 
-        healthLable = new JLabel("");
-        healthLable.setOpaque(true);
+        healthLabel = new JLabel("");
+        healthLabel.setOpaque(true);
 
-        scene.add(healthLable);
+        scene.add(healthLabel);
         scene.addEntity(player);
         scene.addEntity(enemy);
 
@@ -120,7 +120,7 @@ public class Game extends JFrame {
         while (true) {
             timer = System.currentTimeMillis();
 
-            healthLable.setText(String.valueOf(player.getHealth()));
+            healthLabel.setText(String.valueOf(player.getHealth()));
 
             //player movement
             if (keyController.w) {
@@ -178,40 +178,7 @@ public class Game extends JFrame {
                 hasFireCountStarted = true;
             }
 
-            bullets.forEach((bullet) -> {
-                //left
-                if (bullet.getDirection() == 1) {
-                    bullet.move(-bullet.getSpeed(), 0);
-                }
-                //up
-                if (bullet.getDirection() == 2) {
-                    bullet.move(0, -bullet.getSpeed());
-                }
-                //right
-                if (bullet.getDirection() == 3) {
-                    bullet.move(bullet.getSpeed(), 0);
-                }
-                //down
-                if (bullet.getDirection() == 4) {
-                    bullet.move(0, bullet.getSpeed());
-                }
-                //left and up
-                if (bullet.getDirection() == 5) {
-                    bullet.move(-bullet.getSpeed(), -bullet.getSpeed());
-                }
-                //left and down
-                if (bullet.getDirection() == 6) {
-                    bullet.move(-bullet.getSpeed(), bullet.getSpeed());
-                }
-                //right and up
-                if (bullet.getDirection() == 7) {
-                    bullet.move(bullet.getSpeed(), -bullet.getSpeed());
-                }
-                //right and down
-                if (bullet.getDirection() == 8) {
-                    bullet.move(bullet.getSpeed(), bullet.getSpeed());
-                }
-            });
+            bullets.forEach(Bullet::movement);
 
             enemy.movement(player.getPosition().x, player.getPosition().y);
 
