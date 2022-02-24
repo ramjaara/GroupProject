@@ -1,14 +1,14 @@
 package com.company.objects.entities;
 
+import java.awt.*;
+
 public class Bullet extends Entity{
     int direction;
 
-    public Bullet(String name, int positionX, int positionY, int direction) {
-        super(name, positionX, positionY);
+    public Bullet(String name, Point position, int direction) {
+        super(name, position);
         this.direction = direction;
         this.speed = 4;
-        this.width = 3;
-        this.height = 3;
     }
 
     public int getDirection() {

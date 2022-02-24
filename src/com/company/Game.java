@@ -2,7 +2,6 @@ package com.company;
 
 import com.company.objects.entities.Bullet;
 import com.company.objects.entities.Enemy;
-import com.company.objects.entities.Entity;
 import com.company.objects.entities.Protag;
 
 import javax.swing.*;
@@ -18,7 +17,6 @@ public class Game extends JFrame {
     protected JLabel background;
     protected BufferedImage backgroundImage;
 
-    protected List<Entity> entities = new ArrayList<>();
     protected List<Bullet> bullets = new ArrayList<>();
 
     protected Protag player;
@@ -78,7 +76,7 @@ public class Game extends JFrame {
         playerGraphics.setColor(new Color(255, 0, 255));
         playerGraphics.fillRect(0, 0, 32, 32);
         player.setImage(playerImage);
-        player.setPosition(400, 400);
+        player.setPosition(new Point(200, 200));
 
         //enemy
         enemyImage = new BufferedImage(32, 32, BufferedImage.TYPE_INT_RGB);
@@ -87,13 +85,22 @@ public class Game extends JFrame {
         enemyGraphics.fillRect(0, 0, 32, 32);
         enemy = new Enemy("shifu", 32, 32);
         enemy.setImage(enemyImage);
-        enemy.setPosition(500, 500);
+        enemy.setPosition(new Point(200, 200));
 
         //bullet Image init
         bulletImage = new BufferedImage(3, 3, BufferedImage.TYPE_INT_RGB);
         Graphics bulletGraphics = bulletImage.getGraphics();
         bulletGraphics.setColor(new Color(255, 0, 0));
         bulletGraphics.fillRect(0, 0, 10, 10);
+    }
+
+    public void makeBullet(int direction, int bulletNumber) {
+        Bullet bullet = new Bullet("bullet" + bulletNumber,
+                new Point(player.getPosition().x + 16, player.getPosition().y + 16),
+                direction);
+        bullet.setImage(bulletImage);
+        bullets.add(bullet);
+        scene.addEntity(bullet);
     }
 
     public static void main(String[] args) {
@@ -103,92 +110,69 @@ public class Game extends JFrame {
 
     public void gameLoop() {
         long timer;
-        long update_timer = 60;
         int restTimer = 0;
         int bulletNumber = 0;
+        boolean hasShot = false;
 
         while (true) {
             timer = System.currentTimeMillis();
 
             healthLable.setText(String.valueOf(player.getHealth()));
 
+            //player movement
             if (keyController.w) {
-                if (player.getPositionY() > 0) {
+                if (player.getPosition().y > 0) {
                     player.move(0, -player.getSpeed());
                 }
-                System.out.println(player.getPositionX() + "," + player.getPositionY());
             }
 
             if (keyController.s) {
-                if (player.getPositionY() < sceneHeight - 50)
+                if (player.getPosition().y < sceneHeight - 50)
                     player.move(0, player.getSpeed());
-                System.out.println(player.getPositionX() + "," + player.getPositionY());
             }
 
             if (keyController.a) {
-                if (player.getPositionX() > 0) {
+                if (player.getPosition().x > 0) {
                     player.move(-player.getSpeed(), 0);
                 }
-                System.out.println(player.getPositionX() + "," + player.getPositionY());
             }
 
             if (keyController.d) {
-                if (player.getPositionX() < sceneWidth - 32) {
+                if (player.getPosition().x < sceneWidth - 32) {
                     player.move(player.getSpeed(), 0);
                 }
-                System.out.println(player.getPositionX() + "," + player.getPositionY());
             }
 
-            if (keyController.left) {
-                if (keyController.up) {
+            //player shooting
+            if (keyController.left || keyController.up ||
+                    keyController.right || keyController.down) {
 
-                }if(keyController.down){
-
-                }else{
-                    Bullet bullet = new Bullet("bullet" + bulletNumber, player.getPositionX(), player.getPositionY(), 1);
-                    bullet.setImage(bulletImage);
-                    bullet.setPosition(player.getPositionX() + 16, player.getPositionY() + 16);
-                    bullets.add(bullet);
-                    scene.addEntity(bullet);
+                if (keyController.left && keyController.up && !hasShot) {
+                    makeBullet(6, bulletNumber);
                     bulletNumber++;
+                    hasShot = true;
                 }
-            }
+                if (keyController.left && !hasShot) {
+                    makeBullet(1, bulletNumber);
+                    bulletNumber++;
+                    hasShot = true;
+                }
+                if (keyController.up && !hasShot) {
+                    makeBullet(2, bulletNumber);
+                    bulletNumber++;
+                    hasShot = true;
+                }
+                if (keyController.right && !hasShot) {
+                    makeBullet(3, bulletNumber);
+                    bulletNumber++;
+                    hasShot = true;
+                }
+                if (keyController.down && !hasShot) {
+                    makeBullet(4, bulletNumber);
+                    bulletNumber++;
+                    hasShot = true;
+                }
 
-            /*if (keyController.left || keyController.up) {
-                Bullet bullet = new Bullet("bullet" + bulletNumber, player.getPositionX(), player.getPositionY(), 5);
-                bullet.setImage(bulletImage);
-                bullet.setPosition(player.getPositionX() + 16, player.getPositionY() + 16);
-                bullets.add(bullet);
-                scene.addEntity(bullet);
-                bulletNumber++;
-                System.out.println(bullets);
-            }*/
-
-            if (keyController.up) {
-                Bullet bullet = new Bullet("bullet" + bulletNumber, 100, 100, 2);
-                bullet.setImage(bulletImage);
-                bullet.setPosition(player.getPositionX() + 16, player.getPositionY() + 16);
-                bullets.add(bullet);
-                scene.addEntity(bullet);
-                bulletNumber++;
-            }
-
-            if (keyController.right) {
-                Bullet bullet = new Bullet("bullet" + bulletNumber, player.getPositionX(), player.getPositionY(), 3);
-                bullet.setImage(bulletImage);
-                bullet.setPosition(player.getPositionX() + 16, player.getPositionY() + 16);
-                bullets.add(bullet);
-                scene.addEntity(bullet);
-                bulletNumber++;
-            }
-
-            if (keyController.down) {
-                Bullet bullet = new Bullet("bullet" + bulletNumber, player.getPositionX(), player.getPositionY(), 4);
-                bullet.setImage(bulletImage);
-                bullet.setPosition(player.getPositionX() + 16, player.getPositionY() + 16);
-                bullets.add(bullet);
-                scene.addEntity(bullet);
-                bulletNumber++;
             }
 
             bullets.forEach((bullet) -> {
@@ -208,12 +192,25 @@ public class Game extends JFrame {
                 if (bullet.getDirection() == 4) {
                     bullet.move(0, bullet.getSpeed());
                 }
+                //left and up
                 if (bullet.getDirection() == 5) {
                     bullet.move(-bullet.getSpeed(), -bullet.getSpeed());
                 }
+                //left and down
+                if (bullet.getDirection() == 6) {
+                    bullet.move(-bullet.getSpeed(), bullet.getSpeed());
+                }
+                //right and up
+                if (bullet.getDirection() == 7) {
+                    bullet.move(bullet.getSpeed(), -bullet.getSpeed());
+                }
+                //right and down
+                if (bullet.getDirection() == 8) {
+                    bullet.move(bullet.getSpeed(), bullet.getSpeed());
+                }
             });
 
-            enemy.movement(player.getPositionX(), player.getPositionY());
+            enemy.movement(player.getPosition().x, player.getPosition().y);
 
             //damage
             if (restTimer == 10) {
@@ -222,9 +219,7 @@ public class Game extends JFrame {
                 }
             }
 
-
-            update_timer -= 1;
-
+            //exit clause
             if (player.getHealth() <= 0) {
                 System.out.println("GAME OVER");
                 System.exit(0);
@@ -243,7 +238,7 @@ public class Game extends JFrame {
                 }
             }
             restTimer++;
-
+            hasShot = false;
             if (restTimer == 20) {
                 restTimer = 0;
             }

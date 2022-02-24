@@ -7,18 +7,24 @@ public class Entity {
     float health;
     String name;
     int speed;
-    int positionX;
-    int positionY;
+    Point position = new Point(0, 0);
     int height;
     int width;
-    Rectangle hitBox = new Rectangle(positionX, positionY,
+    Rectangle hitBox = new Rectangle(position.x, position.y,
             width, height);
     protected BufferedImage image;
 
+    //regular entity constructor(i.e player/enemy)
     public Entity(String name, int width, int height) {
         this.name = name;
         this.width = width;
         this.height = height;
+    }
+
+    //bullet constructor
+    public Entity(String name, Point position){
+        this.name = name;
+        this.position = position;
     }
 
     public void setImage(BufferedImage image) {
@@ -49,13 +55,7 @@ public class Entity {
         this.speed = speed;
     }
 
-    public int getPositionX() {
-        return positionX;
-    }
-
-    public int getPositionY() {
-        return positionY;
-    }
+    public Point getPosition(){return position;}
 
     public int getHeight() {
         return height;
@@ -77,27 +77,19 @@ public class Entity {
         return hitBox;
     }
 
-    public void setPosition(int x, int y) {
-        this.positionX = x;
-        this.positionY = y;
+    public void setPosition(Point position){
+        this.position = position;
     }
 
     public void draw(Graphics g) {
-        g.drawImage(image, positionX, positionY, null);
+        g.drawImage(image, position.x, position.y, null);
     }
 
     public void move(int x, int y) {
-        this.positionX = this.positionX + x;
-        this.positionY = this.positionY + y;
-        this.hitBox.x = this.positionX;
-        this.hitBox.y = this.positionY;
-    }
-
-    public boolean hitBoxCrossed(Rectangle otherHitBox) {
-        if (hitBox.intersects(otherHitBox)) {
-            return true;
-        }
-        return false;
+        this.position.x = this.position.x + x;
+        this.position.y = this.position.y + y;
+        this.hitBox.x = this.position.x;
+        this.hitBox.y = this.position.y;
     }
 }
 

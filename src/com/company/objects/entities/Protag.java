@@ -16,7 +16,6 @@ public class Protag extends Entity {
         return  health + "&" +
                 name  + "&" +
                 speed + "&" +
-                positionX + "&" +
-                positionY;
+                position;
     }
 }

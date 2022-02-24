@@ -12,16 +12,16 @@ public class Enemy extends Entity {
     }
 
     public void movement (int protagX, int protagY){
-        if(protagX<getPositionX()){
+        if(protagX<getPosition().x){
             move(-(this.speed), 0);
         }
-        if(protagX>getPositionX()){
+        if(protagX>getPosition().x){
             move((this.speed), 0);
         }
-        if(protagY<getPositionY()){
+        if(protagY<getPosition().y){
             move(0, -(this.speed));
         }
-        if(protagY>getPositionY()){
+        if(protagY>getPosition().y){
             move(0, (this.speed));
         }
     }
