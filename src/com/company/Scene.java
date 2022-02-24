@@ -3,6 +3,7 @@ package com.company;
 import com.company.objects.entities.Entity;
 
 import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.*;
@@ -11,11 +12,13 @@ public class Scene extends JPanel {
 
     private int width;
     private int height;
+    private BufferedImage background;
 
     private List<Entity> entities = new ArrayList<>();
 
-    public Scene() {
+    public Scene(BufferedImage background) {
         super();
+        this.background = background;
         width = 100;
         height = 100;
     }
@@ -31,6 +34,7 @@ public class Scene extends JPanel {
     @Override
     protected void paintComponent(Graphics g){
         super.paintComponent(g);
+        g.drawImage(background, 0 , 0, this);
         entities.forEach((entity -> entity.draw(g)));
     }
 }

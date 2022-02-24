@@ -2,11 +2,15 @@ package com.company;
 
 import com.company.objects.entities.Bullet;
 import com.company.objects.entities.Enemy;
+import com.company.objects.entities.Entity;
 import com.company.objects.entities.Protag;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,8 +18,15 @@ public class Game extends JFrame {
 
     protected Scene scene;
 
-    protected JLabel background;
+    protected Entity background;
     protected BufferedImage backgroundImage;
+    {
+        try {
+            backgroundImage = ImageIO.read(new File("src/com/company/images/mapTest.png"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
     protected List<Bullet> bullets = new ArrayList<>();
 
@@ -28,7 +39,6 @@ public class Game extends JFrame {
     protected BufferedImage bulletImage;
 
     protected KeyController keyController;
-    protected MouseController mouseController;
 
     protected int sceneWidth = 800;
     protected int sceneHeight = 800;
@@ -40,7 +50,8 @@ public class Game extends JFrame {
         setTitle("Test Scene");
         setDefaultCloseOperation(EXIT_ON_CLOSE);
 
-        scene = new Scene();
+        scene = new Scene(backgroundImage);
+
         add(scene);
         pack();
 
@@ -48,24 +59,6 @@ public class Game extends JFrame {
         setVisible(true);
 
         init();
-    }
-
-    private void init() {
-        keyController = new KeyController();
-        mouseController = new MouseController();
-        addKeyListener(keyController);
-        addMouseMotionListener(mouseController);
-
-        setScene();
-
-        healthLabel = new JLabel("");
-        healthLabel.setOpaque(true);
-
-        scene.add(healthLabel);
-        scene.addEntity(player);
-        scene.addEntity(enemy);
-
-        scene.repaint();
     }
 
     public void setScene() {
@@ -93,6 +86,23 @@ public class Game extends JFrame {
         bulletGraphics.setColor(new Color(255, 0, 0));
         bulletGraphics.fillRect(0, 0, 10, 10);
     }
+
+    private void init() {
+        keyController = new KeyController();
+        addKeyListener(keyController);
+
+        setScene();
+
+        healthLabel = new JLabel("");
+        healthLabel.setOpaque(true);
+
+        scene.add(healthLabel);
+        scene.addEntity(player);
+        scene.addEntity(enemy);
+
+        scene.repaint();
+    }
+
 
     public void makeBullet(int direction, int bulletNumber) {
         Bullet bullet = new Bullet("bullet" + bulletNumber,
