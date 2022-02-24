@@ -113,6 +113,9 @@ public class Game extends JFrame {
         int restTimer = 0;
         int bulletNumber = 0;
         boolean hasShot = false;
+        boolean hasFireCountStarted = false;
+        int fireCount = 0;
+        int fireRate = 10;
 
         while (true) {
             timer = System.currentTimeMillis();
@@ -144,8 +147,8 @@ public class Game extends JFrame {
             }
 
             //player shooting
-            if (keyController.left || keyController.up ||
-                    keyController.right || keyController.down) {
+            if ((keyController.left || keyController.up ||
+                    keyController.right || keyController.down) && !hasFireCountStarted) {
 
                 if (keyController.left && keyController.up && !hasShot) {
                     makeBullet(6, bulletNumber);
@@ -172,7 +175,7 @@ public class Game extends JFrame {
                     bulletNumber++;
                     hasShot = true;
                 }
-
+                hasFireCountStarted = true;
             }
 
             bullets.forEach((bullet) -> {
@@ -238,9 +241,16 @@ public class Game extends JFrame {
                 }
             }
             restTimer++;
+            if(hasFireCountStarted){
+                fireCount++;
+            }
             hasShot = false;
             if (restTimer == 20) {
                 restTimer = 0;
+            }
+            if(fireCount == fireRate){
+                fireCount = 0;
+                hasFireCountStarted = false;
             }
         }
     }
