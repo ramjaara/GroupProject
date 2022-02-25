@@ -1,4 +1,4 @@
-package com.company.objects.entities;
+package com.company.objects.floorItems;
 
 public class Pickup {
     String name;

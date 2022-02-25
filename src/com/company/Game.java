@@ -2,7 +2,6 @@ package com.company;
 
 import com.company.objects.entities.Bullet;
 import com.company.objects.entities.Enemy;
-import com.company.objects.entities.Entity;
 import com.company.objects.entities.Protag;
 
 import javax.imageio.ImageIO;
@@ -18,8 +17,8 @@ public class Game extends JFrame {
 
     protected Scene scene;
 
-    protected Entity background;
     protected BufferedImage backgroundImage;
+
     {
         try {
             backgroundImage = ImageIO.read(new File("src/com/company/images/mapTest.png"));
@@ -29,11 +28,13 @@ public class Game extends JFrame {
     }
 
     protected List<Bullet> bullets = new ArrayList<>();
+    protected List<Enemy> enemies = new ArrayList<>();
 
     protected Protag player;
     protected BufferedImage playerImage;
 
-    protected Enemy enemy;
+    protected Enemy enemy1;
+    protected Enemy enemy2;
     protected BufferedImage enemyImage;
 
     protected BufferedImage bulletImage;
@@ -76,9 +77,15 @@ public class Game extends JFrame {
         Graphics enemyGraphics = enemyImage.getGraphics();
         enemyGraphics.setColor(new Color(0, 255, 250));
         enemyGraphics.fillRect(0, 0, 32, 32);
-        enemy = new Enemy("shifu", 32, 32);
-        enemy.setImage(enemyImage);
-        enemy.setPosition(new Point(200, 200));
+        enemy1 = new Enemy("shifu", 32, 32);
+        enemy1.setImage(enemyImage);
+        enemy1.setPosition(new Point(200, 200));
+        enemies.add(enemy1);
+
+        enemy2 = new Enemy("shifu", 32, 32);
+        enemy2.setImage(enemyImage);
+        enemy2.setPosition(new Point(0, 700));
+        enemies.add(enemy2);
 
         //bullet Image init
         bulletImage = new BufferedImage(3, 3, BufferedImage.TYPE_INT_RGB);
@@ -98,15 +105,21 @@ public class Game extends JFrame {
 
         scene.add(healthLabel);
         scene.addEntity(player);
-        scene.addEntity(enemy);
+        scene.addEntity(enemy1);
+        scene.addEntity(enemy2);
 
         scene.repaint();
     }
 
+    public void kill(Enemy enemy) {
+        scene.removeEntity(enemy);
+        enemy.setPosition(new Point(1000, 1000));
+        enemy.die();
+    }
 
     public void makeBullet(int direction, int bulletNumber) {
         Bullet bullet = new Bullet("bullet" + bulletNumber,
-                new Point(player.getPosition().x + 16, player.getPosition().y + 16),
+                new Point(player.getPosition().x + 16, player.getPosition().y + 16), 3, 3,
                 direction);
         bullet.setImage(bulletImage);
         bullets.add(bullet);
@@ -188,15 +201,35 @@ public class Game extends JFrame {
                 hasFireCountStarted = true;
             }
 
-            bullets.forEach(Bullet::movement);
-
-            enemy.movement(player.getPosition().x, player.getPosition().y);
-
-            //damage
-            if (restTimer == 10) {
-                if (player.getHitBox().intersects(enemy.getHitBox())) {
-                    player.setHealth((float) (player.getHealth() - 0.5));
+            //moves bullets and checks if they have shot an enemy
+            bullets.forEach(Bullet -> {
+                if (Bullet.isMoving()) {
+                    Bullet.movement();
+                    enemies.forEach(Enemy -> {
+                        if (Enemy.getHitBox().intersects(Bullet.getHitBox())) {
+                            kill(Enemy);
+                            Bullet.stop();
+                        }
+                    });
                 }
+            });
+
+            //checks if each enemy is alive then moves them
+            enemies.forEach(Enemy ->
+            {
+                if (Enemy.isAlive()) {
+                    Enemy.movement(player.getPosition().x, player.getPosition().y);
+                }
+            });
+
+            //enemy damage for player
+            if (restTimer == 10) {
+                enemies.forEach(Enemy -> {
+                    if (player.getHitBox().intersects(Enemy.getHitBox())) {
+                        player.setHealth((float) (player.getHealth() - 0.5));
+                        kill(Enemy);
+                    }
+                });
             }
 
             //exit clause
@@ -218,14 +251,14 @@ public class Game extends JFrame {
                 }
             }
             restTimer++;
-            if(hasFireCountStarted){
+            if (hasFireCountStarted) {
                 fireCount++;
             }
             hasShot = false;
             if (restTimer == 20) {
                 restTimer = 0;
             }
-            if(fireCount == fireRate){
+            if (fireCount == fireRate) {
                 fireCount = 0;
                 hasFireCountStarted = false;
             }

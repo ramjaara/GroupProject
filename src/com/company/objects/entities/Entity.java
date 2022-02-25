@@ -22,7 +22,7 @@ public class Entity {
     }
 
     //bullet constructor
-    public Entity(String name, Point position){
+    public Entity(String name, Point position, int width, int height){
         this.name = name;
         this.position = position;
     }
@@ -51,9 +51,7 @@ public class Entity {
         return speed;
     }
 
-    public void setSpeed(int speed) {
-        this.speed = speed;
-    }
+    public void setSpeed(int speed) {this.speed = speed;}
 
     public Point getPosition(){return position;}
 
@@ -79,6 +77,8 @@ public class Entity {
 
     public void setPosition(Point position){
         this.position = position;
+        this.hitBox.x = position.x;
+        this.hitBox.y = position.y;
     }
 
     public void draw(Graphics g) {

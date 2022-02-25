@@ -3,12 +3,23 @@ package com.company.objects.entities;
 import java.awt.image.BufferedImage;
 
 public class Enemy extends Entity {
+    boolean isAlive;
+
     public Enemy(String name, int width, int height) {
         super(name, width, height);
         this.health=(float) 5;
         this.speed = 2;
         this.hitBox.width=(width);
         this.hitBox.height=(height);
+        this.isAlive = true;
+    }
+
+    public boolean isAlive(){
+        return this.isAlive;
+    }
+
+    public void die(){
+        this.isAlive=false;
     }
 
     public void movement (int protagX, int protagY){
