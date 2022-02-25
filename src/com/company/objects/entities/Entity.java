@@ -14,6 +14,11 @@ public class Entity {
             width, height);
     protected BufferedImage image;
 
+    //empty constructor
+    public Entity(){
+
+    }
+
     //regular entity constructor(i.e player/enemy)
     public Entity(String name, int width, int height) {
         this.name = name;

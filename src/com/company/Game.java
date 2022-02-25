@@ -3,6 +3,7 @@ package com.company;
 import com.company.objects.entities.Bullet;
 import com.company.objects.entities.Enemy;
 import com.company.objects.entities.Protag;
+import com.company.objects.floorItems.Spawner;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -29,12 +30,11 @@ public class Game extends JFrame {
 
     protected List<Bullet> bullets = new ArrayList<>();
     protected List<Enemy> enemies = new ArrayList<>();
+    protected List<Spawner> spawners = new ArrayList<>();
 
     protected Protag player;
     protected BufferedImage playerImage;
 
-    protected Enemy enemy1;
-    protected Enemy enemy2;
     protected BufferedImage enemyImage;
 
     protected BufferedImage bulletImage;
@@ -48,7 +48,7 @@ public class Game extends JFrame {
 
     public Game() {
         // makes the window
-        setTitle("Test Scene");
+        setTitle("DONT DIE");
         setDefaultCloseOperation(EXIT_ON_CLOSE);
 
         scene = new Scene(backgroundImage);
@@ -63,6 +63,19 @@ public class Game extends JFrame {
     }
 
     public void setScene() {
+        //enemy Spawners
+        Spawner enemySpawnerB = new Spawner(new Point(400, 800), "Enemy", 10);
+        spawners.add(enemySpawnerB);
+
+        Spawner enemySpawnerL = new Spawner(new Point(0, 400), "Enemy", 10);
+        spawners.add(enemySpawnerL);
+
+        Spawner enemySpawnerT = new Spawner(new Point(400, 0), "Enemy", 10);
+        spawners.add(enemySpawnerT);
+
+        Spawner enemySpawnerR = new Spawner(new Point(800, 400), "Enemy", 10);
+        spawners.add(enemySpawnerR);
+
         //player
         player = new Protag("alonso", 32, 32);
         playerImage = new BufferedImage(player.getWidth(), player.getHeight(), BufferedImage.TYPE_INT_RGB);
@@ -72,20 +85,11 @@ public class Game extends JFrame {
         player.setImage(playerImage);
         player.setPosition(new Point(200, 200));
 
-        //enemy
+        //enemy image init
         enemyImage = new BufferedImage(32, 32, BufferedImage.TYPE_INT_RGB);
         Graphics enemyGraphics = enemyImage.getGraphics();
         enemyGraphics.setColor(new Color(0, 255, 250));
         enemyGraphics.fillRect(0, 0, 32, 32);
-        enemy1 = new Enemy("shifu", 32, 32);
-        enemy1.setImage(enemyImage);
-        enemy1.setPosition(new Point(200, 200));
-        enemies.add(enemy1);
-
-        enemy2 = new Enemy("shifu", 32, 32);
-        enemy2.setImage(enemyImage);
-        enemy2.setPosition(new Point(0, 700));
-        enemies.add(enemy2);
 
         //bullet Image init
         bulletImage = new BufferedImage(3, 3, BufferedImage.TYPE_INT_RGB);
@@ -100,13 +104,11 @@ public class Game extends JFrame {
 
         setScene();
 
-        healthLabel = new JLabel("");
+        healthLabel = new JLabel("Health:" + "\n");
         healthLabel.setOpaque(true);
 
         scene.add(healthLabel);
         scene.addEntity(player);
-        scene.addEntity(enemy1);
-        scene.addEntity(enemy2);
 
         scene.repaint();
     }
@@ -139,11 +141,23 @@ public class Game extends JFrame {
         boolean hasFireCountStarted = false;
         int fireCount = 0;
         int fireRate = 10;
+        int spawnRate = 0;
 
         while (true) {
             timer = System.currentTimeMillis();
 
-            healthLabel.setText(String.valueOf(player.getHealth()));
+            healthLabel.setText("Health:\n" + player.getHealth());
+
+            //enemySpawn
+            if (spawnRate == 0) {
+                spawners.forEach(Spawner -> {
+                    if (Spawner.getAmountCreated() <= Spawner.getSpawnAmount()) {
+                        Enemy enemy = (Enemy) Spawner.spawn(enemyImage);
+                        enemies.add(enemy);
+                        scene.addEntity(enemy);
+                    }
+                });
+            }
 
             //player movement
             if (keyController.w) {
@@ -174,7 +188,22 @@ public class Game extends JFrame {
                     keyController.right || keyController.down) && !hasFireCountStarted) {
 
                 if (keyController.left && keyController.up && !hasShot) {
+                    makeBullet(5, bulletNumber);
+                    bulletNumber++;
+                    hasShot = true;
+                }
+                if (keyController.left && keyController.down && !hasShot) {
                     makeBullet(6, bulletNumber);
+                    bulletNumber++;
+                    hasShot = true;
+                }
+                if (keyController.right && keyController.up && !hasShot) {
+                    makeBullet(7, bulletNumber);
+                    bulletNumber++;
+                    hasShot = true;
+                }
+                if (keyController.right && keyController.down && !hasShot) {
+                    makeBullet(8, bulletNumber);
                     bulletNumber++;
                     hasShot = true;
                 }
@@ -251,6 +280,7 @@ public class Game extends JFrame {
                 }
             }
             restTimer++;
+            spawnRate++;
             if (hasFireCountStarted) {
                 fireCount++;
             }
@@ -261,6 +291,9 @@ public class Game extends JFrame {
             if (fireCount == fireRate) {
                 fireCount = 0;
                 hasFireCountStarted = false;
+            }
+            if (spawnRate == 200) {
+                spawnRate = 0;
             }
         }
     }

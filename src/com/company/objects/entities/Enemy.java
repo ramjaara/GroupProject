@@ -3,7 +3,7 @@ package com.company.objects.entities;
 import java.awt.image.BufferedImage;
 
 public class Enemy extends Entity {
-    boolean isAlive;
+    private boolean isAlive;
 
     public Enemy(String name, int width, int height) {
         super(name, width, height);

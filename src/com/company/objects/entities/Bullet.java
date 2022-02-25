@@ -3,8 +3,8 @@ package com.company.objects.entities;
 import java.awt.*;
 
 public class Bullet extends Entity {
-    int direction;
-    boolean isMoving;
+    private int direction;
+    private boolean isMoving;
 
     public Bullet(String name, Point position, int width, int height, int direction) {
         super(name, position, width, height);
