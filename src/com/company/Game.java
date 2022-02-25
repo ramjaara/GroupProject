@@ -33,10 +33,9 @@ public class Game extends JFrame {
     protected List<Spawner> spawners = new ArrayList<>();
 
     protected Protag player;
+
     protected BufferedImage playerImage;
-
     protected BufferedImage enemyImage;
-
     protected BufferedImage bulletImage;
 
     protected KeyController keyController;
@@ -45,6 +44,7 @@ public class Game extends JFrame {
     protected int sceneHeight = 800;
 
     protected JLabel healthLabel;
+    protected JLabel scoreLabel;
 
     public Game() {
         // makes the window
@@ -83,7 +83,7 @@ public class Game extends JFrame {
         playerGraphics.setColor(new Color(255, 0, 255));
         playerGraphics.fillRect(0, 0, 32, 32);
         player.setImage(playerImage);
-        player.setPosition(new Point(200, 200));
+        player.setPosition(new Point(400, 400));
 
         //enemy image init
         enemyImage = new BufferedImage(32, 32, BufferedImage.TYPE_INT_RGB);
@@ -104,10 +104,15 @@ public class Game extends JFrame {
 
         setScene();
 
-        healthLabel = new JLabel("Health:" + "\n");
+        healthLabel = new JLabel("Health:");
         healthLabel.setOpaque(true);
 
+        scoreLabel = new JLabel("Score:");
+        scoreLabel.setHorizontalTextPosition(SwingConstants.RIGHT);
+        scoreLabel.setOpaque(true);
+
         scene.add(healthLabel);
+        scene.add(scoreLabel);
         scene.addEntity(player);
 
         scene.repaint();
@@ -140,13 +145,14 @@ public class Game extends JFrame {
         boolean hasShot = false;
         boolean hasFireCountStarted = false;
         int fireCount = 0;
-        int fireRate = 10;
+        int fireRate = 30;
         int spawnRate = 0;
 
         while (true) {
             timer = System.currentTimeMillis();
 
             healthLabel.setText("Health:\n" + player.getHealth());
+            scoreLabel.setText("Score:" + player.getScore());
 
             //enemySpawn
             if (spawnRate == 0) {
@@ -236,6 +242,7 @@ public class Game extends JFrame {
                     Bullet.movement();
                     enemies.forEach(Enemy -> {
                         if (Enemy.getHitBox().intersects(Bullet.getHitBox())) {
+                            player.setScore(player.getScore() + 1);
                             kill(Enemy);
                             Bullet.stop();
                         }

@@ -23,17 +23,13 @@ public class Scene extends JPanel {
         height = 100;
     }
 
-    public void removeEntity(Entity e){
-        entities.remove(e);
-    }
+    public void removeEntity(Entity e){entities.remove(e);}
 
     public Dimension getPrefferredSize(){
         return new Dimension(this.width, this.height);
     }
 
-    public void addEntity(Entity e){
-        entities.add(e);
-    }
+    public void addEntity(Entity e){entities.add(e);}
 
     @Override
     protected void paintComponent(Graphics g){
