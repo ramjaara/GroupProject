@@ -1,4 +1,4 @@
-package com.company;
+package com.company.panels;
 
 import com.company.objects.entities.Entity;
 

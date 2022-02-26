@@ -4,6 +4,7 @@ import com.company.objects.entities.Bullet;
 import com.company.objects.entities.Enemy;
 import com.company.objects.entities.Protag;
 import com.company.objects.floorItems.Spawner;
+import com.company.panels.Scene;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -43,8 +44,8 @@ public class Game extends JFrame {
     protected int sceneWidth = 800;
     protected int sceneHeight = 800;
 
-    protected JLabel healthLabel;
-    protected JLabel scoreLabel;
+    //protected JLabel healthLabel;
+    //protected JLabel scoreLabel;
 
     public Game() {
         // makes the window
@@ -92,10 +93,10 @@ public class Game extends JFrame {
         enemyGraphics.fillRect(0, 0, 32, 32);
 
         //bullet Image init
-        bulletImage = new BufferedImage(3, 3, BufferedImage.TYPE_INT_RGB);
+        bulletImage = new BufferedImage(7, 7, BufferedImage.TYPE_INT_RGB);
         Graphics bulletGraphics = bulletImage.getGraphics();
         bulletGraphics.setColor(new Color(255, 0, 0));
-        bulletGraphics.fillRect(0, 0, 10, 10);
+        bulletGraphics.fillRect(0, 0, 7, 7);
     }
 
     private void init() {
@@ -104,7 +105,7 @@ public class Game extends JFrame {
 
         setScene();
 
-        healthLabel = new JLabel("Health:");
+        /*healthLabel = new JLabel("Health:");
         healthLabel.setOpaque(true);
 
         scoreLabel = new JLabel("Score:");
@@ -112,7 +113,7 @@ public class Game extends JFrame {
         scoreLabel.setOpaque(true);
 
         scene.add(healthLabel);
-        scene.add(scoreLabel);
+        scene.add(scoreLabel);*/
         scene.addEntity(player);
 
         scene.repaint();
@@ -151,8 +152,8 @@ public class Game extends JFrame {
         while (true) {
             timer = System.currentTimeMillis();
 
-            healthLabel.setText("Health:\n" + player.getHealth());
-            scoreLabel.setText("Score:" + player.getScore());
+            //healthLabel.setText("Health:\n" + player.getHealth());
+            //scoreLabel.setText("Score:" + player.getScore());
 
             //enemySpawn
             if (spawnRate == 0) {
