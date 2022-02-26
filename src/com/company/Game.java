@@ -2,8 +2,9 @@ package com.company;
 
 import com.company.objects.entities.Bullet;
 import com.company.objects.entities.Enemy;
-import com.company.objects.entities.Protag;
+import com.company.objects.entities.Player;
 import com.company.objects.floorItems.Spawner;
+import com.company.objects.floorItems.Wall;
 import com.company.panels.Scene;
 
 import javax.imageio.ImageIO;
@@ -14,6 +15,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class Game extends JFrame {
 
@@ -32,8 +34,9 @@ public class Game extends JFrame {
     protected List<Bullet> bullets = new ArrayList<>();
     protected List<Enemy> enemies = new ArrayList<>();
     protected List<Spawner> spawners = new ArrayList<>();
+    protected List<Wall> walls = new ArrayList<>();
 
-    protected Protag player;
+    protected Player player;
 
     protected BufferedImage playerImage;
     protected BufferedImage enemyImage;
@@ -63,42 +66,6 @@ public class Game extends JFrame {
         init();
     }
 
-    public void setScene() {
-        //enemy Spawners
-        Spawner enemySpawnerB = new Spawner(new Point(400, 800), "Enemy", 10);
-        spawners.add(enemySpawnerB);
-
-        Spawner enemySpawnerL = new Spawner(new Point(0, 400), "Enemy", 10);
-        spawners.add(enemySpawnerL);
-
-        Spawner enemySpawnerT = new Spawner(new Point(400, 0), "Enemy", 10);
-        spawners.add(enemySpawnerT);
-
-        Spawner enemySpawnerR = new Spawner(new Point(800, 400), "Enemy", 10);
-        spawners.add(enemySpawnerR);
-
-        //player
-        player = new Protag("alonso", 32, 32);
-        playerImage = new BufferedImage(player.getWidth(), player.getHeight(), BufferedImage.TYPE_INT_RGB);
-        Graphics playerGraphics = playerImage.getGraphics();
-        playerGraphics.setColor(new Color(255, 0, 255));
-        playerGraphics.fillRect(0, 0, 32, 32);
-        player.setImage(playerImage);
-        player.setPosition(new Point(400, 400));
-
-        //enemy image init
-        enemyImage = new BufferedImage(32, 32, BufferedImage.TYPE_INT_RGB);
-        Graphics enemyGraphics = enemyImage.getGraphics();
-        enemyGraphics.setColor(new Color(0, 255, 250));
-        enemyGraphics.fillRect(0, 0, 32, 32);
-
-        //bullet Image init
-        bulletImage = new BufferedImage(7, 7, BufferedImage.TYPE_INT_RGB);
-        Graphics bulletGraphics = bulletImage.getGraphics();
-        bulletGraphics.setColor(new Color(255, 0, 0));
-        bulletGraphics.fillRect(0, 0, 7, 7);
-    }
-
     private void init() {
         keyController = new KeyController();
         addKeyListener(keyController);
@@ -117,6 +84,70 @@ public class Game extends JFrame {
         scene.addEntity(player);
 
         scene.repaint();
+    }
+
+    public void setScene() {
+        //enemy Spawners
+        Spawner enemySpawnerB = new Spawner(new Point(400, 800), "Enemy", 10);
+        spawners.add(enemySpawnerB);
+
+        Spawner enemySpawnerL = new Spawner(new Point(0, 400), "Enemy", 10);
+        spawners.add(enemySpawnerL);
+
+        Spawner enemySpawnerT = new Spawner(new Point(400, 0), "Enemy", 10);
+        spawners.add(enemySpawnerT);
+
+        Spawner enemySpawnerR = new Spawner(new Point(800, 400), "Enemy", 10);
+        spawners.add(enemySpawnerR);
+
+        //player
+        player = new Player("alonso", 32, 32);
+        playerImage = new BufferedImage(player.getWidth(), player.getHeight(), BufferedImage.TYPE_INT_RGB);
+        Graphics playerGraphics = playerImage.getGraphics();
+        playerGraphics.setColor(new Color(255, 0, 255));
+        playerGraphics.fillRect(0, 0, 32, 32);
+        player.setImage(playerImage);
+        player.setPosition(new Point(400, 400));
+
+        //enemy image init
+        enemyImage = new BufferedImage(32, 32, BufferedImage.TYPE_INT_RGB);
+        Graphics enemyGraphics = enemyImage.getGraphics();
+        enemyGraphics.setColor(new Color(0, 255, 250));
+        enemyGraphics.fillRect(0, 0, 32, 32);
+
+        //bullet Image init
+        bulletImage = new BufferedImage(7, 7, BufferedImage.TYPE_INT_RGB);
+        Graphics bulletGraphics = bulletImage.getGraphics();
+        bulletGraphics.setColor(new Color(255, 0, 0));
+        bulletGraphics.fillRect(0, 0, 7, 7);
+
+        //test wall
+        Wall testWall = new Wall(new Point(0, 0), 50, 50);
+        BufferedImage wallImage = new BufferedImage(50, 50, BufferedImage.TYPE_INT_RGB);
+        Graphics wallGraphics = wallImage.getGraphics();
+        wallGraphics.setColor(new Color(0, 0, 0));
+        wallGraphics.fillRect(0, 0, 50, 50);
+        testWall.setImage(wallImage);
+        scene.addFloorItem(testWall);
+    }
+
+    public void playerMove(Player player){
+        //player movement
+        if (keyController.w) {
+            player.move(0, -player.getSpeed());
+        }
+
+        if (keyController.s) {
+            player.move(0, player.getSpeed());
+        }
+
+        if (keyController.a) {
+            player.move(-player.getSpeed(), 0);
+        }
+
+        if (keyController.d) {
+            player.move(player.getSpeed(), 0);
+        }
     }
 
     public void kill(Enemy enemy) {
@@ -148,6 +179,7 @@ public class Game extends JFrame {
         int fireCount = 0;
         int fireRate = 30;
         int spawnRate = 0;
+        AtomicBoolean playerCanMove = new AtomicBoolean(false);
 
         while (true) {
             timer = System.currentTimeMillis();
@@ -166,28 +198,14 @@ public class Game extends JFrame {
                 });
             }
 
-            //player movement
-            if (keyController.w) {
-                if (player.getPosition().y > 0) {
-                    player.move(0, -player.getSpeed());
+            walls.forEach(Wall -> {
+                if(!Wall.getBox().intersects(player.getHitBox())){
+                    playerCanMove.set(true);
                 }
-            }
+            });
 
-            if (keyController.s) {
-                if (player.getPosition().y < sceneHeight - 50)
-                    player.move(0, player.getSpeed());
-            }
-
-            if (keyController.a) {
-                if (player.getPosition().x > 0) {
-                    player.move(-player.getSpeed(), 0);
-                }
-            }
-
-            if (keyController.d) {
-                if (player.getPosition().x < sceneWidth - 32) {
-                    player.move(player.getSpeed(), 0);
-                }
+            if(playerCanMove.get()){
+                playerMove(player);
             }
 
             //player shooting
@@ -243,9 +261,9 @@ public class Game extends JFrame {
                     Bullet.movement();
                     enemies.forEach(Enemy -> {
                         if (Enemy.getHitBox().intersects(Bullet.getHitBox())) {
-                            player.setScore(player.getScore() + 1);
                             kill(Enemy);
                             Bullet.stop();
+                            player.setScore(player.getScore() + 1);
                         }
                     });
                 }
@@ -270,10 +288,10 @@ public class Game extends JFrame {
             }
 
             //exit clause
-            if (player.getHealth() <= 0) {
+            /*if (player.getHealth() <= 0) {
                 System.out.println("GAME OVER");
                 System.exit(0);
-            }
+            }*/
 
             scene.repaint();
 
@@ -287,6 +305,7 @@ public class Game extends JFrame {
 
                 }
             }
+            playerCanMove.set(false);
             restTimer++;
             spawnRate++;
             if (hasFireCountStarted) {

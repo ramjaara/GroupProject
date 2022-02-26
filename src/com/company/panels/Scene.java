@@ -1,6 +1,8 @@
 package com.company.panels;
 
 import com.company.objects.entities.Entity;
+import com.company.objects.floorItems.FloorItem;
+import com.company.objects.floorItems.Wall;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -15,6 +17,7 @@ public class Scene extends JPanel {
     private BufferedImage background;
 
     private List<Entity> entities = new ArrayList<>();
+    private List<FloorItem> floorItems = new ArrayList<>();
 
     public Scene(BufferedImage background) {
         super();
@@ -30,12 +33,14 @@ public class Scene extends JPanel {
     }
 
     public void addEntity(Entity e){entities.add(e);}
+    public void addFloorItem(FloorItem f){floorItems.add(f);}
 
     @Override
     protected void paintComponent(Graphics g){
         super.paintComponent(g);
         g.drawImage(background, 0 , 0, this);
-        entities.forEach((entity -> entity.draw(g)));
+        entities.forEach(entity -> entity.draw(g));
+        floorItems.forEach(floorItem -> floorItem.draw(g));
     }
 }
 

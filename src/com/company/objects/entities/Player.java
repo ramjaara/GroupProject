@@ -1,15 +1,24 @@
 package com.company.objects.entities;
 
-public class Protag extends Entity {
+public class Player extends Entity {
     int score;
+    Boolean canMove = false;
 
-    public Protag(String name, int width, int height) {
+    public Player(String name, int width, int height) {
         super(name, width, height);
         this.health=(float) 10;
         this.speed = 3;
         this.hitBox.width=(width);
         this.hitBox.height=(height);
         this.score = 0;
+    }
+
+    public Boolean getCanMove() {
+        return canMove;
+    }
+
+    public void setCanMove(Boolean canMove) {
+        this.canMove = canMove;
     }
 
     public int getScore() {

@@ -15,9 +15,7 @@ public class Entity {
     protected BufferedImage image;
 
     //empty constructor
-    public Entity(){
-
-    }
+    public Entity(){}
 
     //regular entity constructor(i.e player/enemy)
     public Entity(String name, int width, int height) {
