@@ -17,4 +17,12 @@ public class Wall extends FloorItem {
     public Rectangle getBox() {
         return box;
     }
+
+    public int getHeight() {
+        return height;
+    }
+
+    public int getWidth() {
+        return width;
+    }
 }
