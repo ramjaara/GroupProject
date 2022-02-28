@@ -9,6 +9,8 @@ import com.company.objects.floorItems.Spawner;
 import com.company.objects.floorItems.Wall;
 import com.company.panels.Scene;
 
+import com.company.repo;
+
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
@@ -21,10 +23,10 @@ import java.util.List;
 public class Game extends JFrame {
 
     //make all private then see what breaks
-    protected Scene scene;
+    private Scene scene;
 
     //initialise somewhere else
-    protected BufferedImage backgroundImage;
+    private BufferedImage backgroundImage;
 
     {
         try {
@@ -34,6 +36,10 @@ public class Game extends JFrame {
         }
     }
 
+    boolean hasFireCountStarted;
+    boolean hasShot = false;
+    int bulletNumber;
+
     //staying in the game class
     protected List<Bullet> bullets = new ArrayList<>();
     protected List<Enemy> enemies = new ArrayList<>();
@@ -41,6 +47,18 @@ public class Game extends JFrame {
     protected List<Wall> walls = new ArrayList<>();
     private Layout layout;
     protected KeyController keyController;
+
+    public void setScene(Scene scene) {this.scene = scene;}
+
+    public void setBullets(List<Bullet> bullets) {this.bullets = bullets;}
+
+    public void setEnemies(List<Enemy> enemies) {this.enemies = enemies;}
+
+    public void setSpawners(List<Spawner> spawners) {this.spawners = spawners;}
+
+    public void setWalls(List<Wall> walls) {this.walls = walls;}
+
+    public void setLayout(Layout layout) {this.layout = layout;}
 
     //to be assigned in layout
     protected Player player;
@@ -53,9 +71,6 @@ public class Game extends JFrame {
     protected BufferedImage bulletImage;
 
     //to be in repository
-    protected boolean hasFireCountStarted = false;
-    protected int bulletNumber = 0;
-    protected boolean hasShot = false;
     protected int sceneWidth = 800;
     protected int sceneHeight = 800;
 
@@ -216,7 +231,7 @@ public class Game extends JFrame {
     //playerMethods
     public void playerShoot() {
         if ((keyController.left || keyController.up ||
-                keyController.right || keyController.down) && !hasFireCountStarted) {
+                keyController.right || keyController.down) && !repo.hasFireCountStarted) {
 
             if (keyController.left && keyController.up && !hasShot) {
                 makeBullet(5, bulletNumber);
@@ -381,7 +396,7 @@ public class Game extends JFrame {
             }
             restTimer++;
             spawnRate++;
-            if (hasFireCountStarted) {
+            if (repo.hasFireCountStarted) {
                 fireCount++;
             }
             hasShot = false;
@@ -390,7 +405,7 @@ public class Game extends JFrame {
             }
             if (fireCount == fireRate) {
                 fireCount = 0;
-                hasFireCountStarted = false;
+                repo.hasFireCountStarted = false;
             }
             if (spawnRate == 200) {
                 spawnRate = 0;
