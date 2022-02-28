@@ -2,7 +2,6 @@ package com.company.panels;
 
 import com.company.objects.entities.Entity;
 import com.company.objects.floorItems.FloorItem;
-import com.company.objects.floorItems.Wall;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;

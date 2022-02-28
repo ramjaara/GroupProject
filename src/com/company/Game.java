@@ -1,5 +1,7 @@
 package com.company;
 
+import com.company.KeyController;
+import com.company.objects.Layout;
 import com.company.objects.entities.Bullet;
 import com.company.objects.entities.Enemy;
 import com.company.objects.entities.Player;
@@ -18,41 +20,44 @@ import java.util.List;
 
 public class Game extends JFrame {
 
+    //make all private then see what breaks
     protected Scene scene;
 
+    //initialise somewhere else
     protected BufferedImage backgroundImage;
 
     {
         try {
-            backgroundImage = ImageIO.read(new File("src/com/company/images/mapTest.png"));
+            backgroundImage = ImageIO.read(new File("src/com/com.company/images/mapTest.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
+    //staying in the game class
     protected List<Bullet> bullets = new ArrayList<>();
     protected List<Enemy> enemies = new ArrayList<>();
     protected List<Spawner> spawners = new ArrayList<>();
     protected List<Wall> walls = new ArrayList<>();
+    private Layout layout;
+    protected KeyController keyController;
 
+    //to be assigned in layout
     protected Player player;
+    //protected JLabel healthLabel;
+    //protected JLabel scoreLabel;
 
+    //assign in methods
     protected BufferedImage playerImage;
     protected BufferedImage enemyImage;
     protected BufferedImage bulletImage;
 
-    protected KeyController keyController;
-
+    //to be in repository
     protected boolean hasFireCountStarted = false;
-
     protected int bulletNumber = 0;
     protected boolean hasShot = false;
-
     protected int sceneWidth = 800;
     protected int sceneHeight = 800;
-
-    //protected JLabel healthLabel;
-    //protected JLabel scoreLabel;
 
     public Game() {
         // makes the window
@@ -90,6 +95,7 @@ public class Game extends JFrame {
         scene.repaint();
     }
 
+    //whole setScene method to be put in layout
     public void setScene() {
         //enemy Spawners
         Spawner enemySpawnerB = new Spawner(new Point(400, 800), "Enemy", 10);
@@ -136,13 +142,14 @@ public class Game extends JFrame {
         walls.add(testWall);
     }
 
+    //playerMethods
     public int checkPlayerCanMove(Player player) {
         int count = 0;
         for (Wall wall : walls) {
             int sideCheckCounter = 0;
             //if the player is to the right of the wall
             if (player.getHitBox().intersects(wall.getBox()) &&
-                    player.getHitBox().x/*the leftmost x value of the player*/ >
+                    player.getHitBox().x/*the leftmost x value of the player*/ <
                             wall.getBox().x + wall.getBox().width/*the rightmost x value of the wall*/) {
                 sideCheckCounter++;
                 player.setCanMoveLeft(false);
@@ -178,6 +185,7 @@ public class Game extends JFrame {
         return count;
     }
 
+    //playerMethods
     public void resetPlayer(Player player) {
         player.setCanMoveLeft(true);
         player.setCanMoveRight(true);
@@ -185,6 +193,7 @@ public class Game extends JFrame {
         player.setCanMoveDown(true);
     }
 
+    //playerMethods
     public void playerMove(Player player) {
         //player movement
         if (keyController.w && player.getCanMoveUp()) {
@@ -204,6 +213,7 @@ public class Game extends JFrame {
         }
     }
 
+    //playerMethods
     public void playerShoot() {
         if ((keyController.left || keyController.up ||
                 keyController.right || keyController.down) && !hasFireCountStarted) {
@@ -252,12 +262,14 @@ public class Game extends JFrame {
         }
     }
 
+    //enemyMethods
     public void kill(Enemy enemy) {
         scene.removeEntity(enemy);
         enemy.setPosition(new Point(1000, 1000));
         enemy.die();
     }
 
+    //bulletMethods
     public void makeBullet(int direction, int bulletNumber) {
         Bullet bullet = new Bullet("bullet" + bulletNumber,
                 new Point(player.getPosition().x + 16, player.getPosition().y + 16), 3, 3,
@@ -273,9 +285,9 @@ public class Game extends JFrame {
     }
 
     public void gameLoop() {
+        //put in level repository
         long timer;
         int restTimer = 0;
-
         int fireCount = 0;
         int fireRate = 30;
         int spawnRate = 0;
@@ -286,7 +298,7 @@ public class Game extends JFrame {
             //healthLabel.setText("Health:\n" + player.getHealth());
             //scoreLabel.setText("Score:" + player.getScore());
 
-            //enemySpawn
+            //enemySpawn (put in spawnMethods)
             if (spawnRate == 0) {
                 spawners.forEach(Spawner -> {
                     if (Spawner.getAmountCreated() <= Spawner.getSpawnAmount()) {
@@ -297,11 +309,12 @@ public class Game extends JFrame {
                 });
             }
 
-            //player movement
+            //player movement (put in playerMethods as part of one big player movement thing)
             if (checkPlayerCanMove(player) == walls.size()) {
                 playerMove(player);
             }
 
+            //temp
             System.out.println(walls.get(0).getBox() + "\n" +
                     player.getHitBox() + "\n" +
                     player.getCanMoveLeft() + "\n" +
@@ -309,7 +322,10 @@ public class Game extends JFrame {
                     player.getCanMoveUp() + "\n" +
                     player.getCanMoveDown() + "\n");
 
+            //as part of player movement logic
             resetPlayer(player);
+
+            //is fine but make fire count be in a repository
             if (fireCount == 0) {
                 playerShoot();
             }

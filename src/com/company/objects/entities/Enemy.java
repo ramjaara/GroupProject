@@ -1,7 +1,5 @@
 package com.company.objects.entities;
 
-import java.awt.image.BufferedImage;
-
 public class Enemy extends Entity {
     private boolean isAlive;
 

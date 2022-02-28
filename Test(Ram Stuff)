@@ -1,5 +1,5 @@
 
-package com.company;
+package com.com.company;
 
 import java.io.*;
 import java.util.Scanner;
