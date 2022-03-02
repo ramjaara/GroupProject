@@ -1,6 +1,7 @@
 package com.company;
 
-import com.company.KeyController;
+import com.company.methods.playerMethods;
+import com.company.objects.KeyController;
 import com.company.objects.Layout;
 import com.company.objects.entities.Bullet;
 import com.company.objects.entities.Enemy;
@@ -8,8 +9,8 @@ import com.company.objects.entities.Player;
 import com.company.objects.floorItems.Spawner;
 import com.company.objects.floorItems.Wall;
 import com.company.panels.Scene;
-
-import com.company.repo;
+import com.company.repositories.loopRepo;
+import com.company.repositories.sceneRepo;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -36,17 +37,16 @@ public class Game extends JFrame {
         }
     }
 
-    boolean hasFireCountStarted;
     boolean hasShot = false;
     int bulletNumber;
 
     //staying in the game class
-    protected List<Bullet> bullets = new ArrayList<>();
-    protected List<Enemy> enemies = new ArrayList<>();
-    protected List<Spawner> spawners = new ArrayList<>();
-    protected List<Wall> walls = new ArrayList<>();
+    private List<Bullet> bullets;
+    private List<Enemy> enemies;
+    private List<Spawner> spawners;
+    private List<Wall> walls;
     private Layout layout;
-    protected KeyController keyController;
+    public KeyController keyController;
 
     public void setScene(Scene scene) {this.scene = scene;}
 
@@ -91,6 +91,8 @@ public class Game extends JFrame {
     }
 
     private void init() {
+        setBullets(sceneRepo.bullets);
+
         keyController = new KeyController();
         addKeyListener(keyController);
 
@@ -160,6 +162,7 @@ public class Game extends JFrame {
     //playerMethods
     public int checkPlayerCanMove(Player player) {
         int count = 0;
+
         for (Wall wall : walls) {
             int sideCheckCounter = 0;
             //if the player is to the right of the wall
@@ -181,7 +184,7 @@ public class Game extends JFrame {
             //if the player is above the wall
             if (player.getHitBox().intersects(wall.getBox()) &&
                     player.getHitBox().y - player.getHitBox().height/*the lowest y value of the player*/ <
-                            wall.getBox().y/*the heighest y value of the wall*/) {
+                            wall.getBox().y/*the highest y value of the wall*/) {
                 sideCheckCounter++;
                 player.setCanMoveDown(false);
             }
@@ -231,7 +234,7 @@ public class Game extends JFrame {
     //playerMethods
     public void playerShoot() {
         if ((keyController.left || keyController.up ||
-                keyController.right || keyController.down) && !repo.hasFireCountStarted) {
+                keyController.right || keyController.down) && !loopRepo.hasFireCountStarted) {
 
             if (keyController.left && keyController.up && !hasShot) {
                 makeBullet(5, bulletNumber);
@@ -273,7 +276,7 @@ public class Game extends JFrame {
                 bulletNumber++;
                 hasShot = true;
             }
-            hasFireCountStarted = true;
+            loopRepo.hasFireCountStarted = true;
         }
     }
 
@@ -309,6 +312,14 @@ public class Game extends JFrame {
 
         while (true) {
             timer = System.currentTimeMillis();
+            loopRepo.w = keyController.w;
+            loopRepo.a = keyController.a;
+            loopRepo.s = keyController.s;
+            loopRepo.d = keyController.d;
+            loopRepo.up = keyController.up;
+            loopRepo.down = keyController.down;
+            loopRepo.left = keyController.left;
+            loopRepo.right = keyController.right;
 
             //healthLabel.setText("Health:\n" + player.getHealth());
             //scoreLabel.setText("Score:" + player.getScore());
@@ -342,7 +353,7 @@ public class Game extends JFrame {
 
             //is fine but make fire count be in a repository
             if (fireCount == 0) {
-                playerShoot();
+                playerMethods.playerShoot(player);
             }
 
             //moves bullets and checks if they have shot an enemy
@@ -396,16 +407,15 @@ public class Game extends JFrame {
             }
             restTimer++;
             spawnRate++;
-            if (repo.hasFireCountStarted) {
+            if (loopRepo.hasFireCountStarted) {
                 fireCount++;
             }
-            hasShot = false;
             if (restTimer == 20) {
                 restTimer = 0;
             }
             if (fireCount == fireRate) {
                 fireCount = 0;
-                repo.hasFireCountStarted = false;
+                loopRepo.hasFireCountStarted = false;
             }
             if (spawnRate == 200) {
                 spawnRate = 0;
