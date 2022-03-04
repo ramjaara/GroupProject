@@ -98,10 +98,11 @@ public class playerMethods {
         for (Wall wall : sceneRepo.walls) {
             //fix logic
             //if the player is right of the wall
-            if (player.getHitBox().x<=wall.getBox().x+wall.getBox().width &&
-                    (wall.getBox().y + wall.getBox().height > player.getHitBox().y)) {
+            if (player.getHitBox().x<=wall.getBox().x + wall.getBox().width &&
+                    (wall.getBox().y < player.getHitBox().y + wall.getBox().height)) {
                 player.setCanMoveLeft(false);
-            }if(player.getHitBox().y-player.getHitBox().height<wall.getBox().y){
+            }if(player.getHitBox().y+player.getHitBox().height<wall.getBox().y ||
+            player.getHitBox().y>wall.getBox().y+wall.getBox().height){
                 player.setCanMoveLeft(true);
             }
             //if player is left of the wall
@@ -112,7 +113,7 @@ public class playerMethods {
                 player.setCanMoveRight(true);
             }
 
-            if(player.getHitBox().y>wall.getBox().y+wall.getBox().height &&
+            if(player.getHitBox().y==wall.getBox().y+wall.getBox().height &&
                     player.getHitBox().x+player.getHitBox().width>=wall.getBox().x){
                 player.setCanMoveUp(false);
             }
