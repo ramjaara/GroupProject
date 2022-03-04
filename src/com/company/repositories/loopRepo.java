@@ -4,6 +4,7 @@ public class loopRepo {
     //shooting variables
     public static boolean hasFireCountStarted;
     public static boolean hasShot;
+    public static int bulletNumber;
 
     //key states
     public static boolean w;

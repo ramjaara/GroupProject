@@ -12,53 +12,28 @@ import com.company.panels.Scene;
 import com.company.repositories.loopRepo;
 import com.company.repositories.sceneRepo;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 public class Game extends JFrame {
 
-    //make all private then see what breaks
-    private Scene scene;
-
-    //initialise somewhere else
-    private BufferedImage backgroundImage;
-
-    {
-        try {
-            backgroundImage = ImageIO.read(new File("src/com/com.company/images/mapTest.png"));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    boolean hasShot = false;
-    int bulletNumber;
-
     //staying in the game class
+    private Scene scene;
     private List<Bullet> bullets;
     private List<Enemy> enemies;
     private List<Spawner> spawners;
     private List<Wall> walls;
     private Layout layout;
-    public KeyController keyController;
+    public KeyController keyController = new KeyController();;
 
-    public void setScene(Scene scene) {this.scene = scene;}
-
-    public void setBullets(List<Bullet> bullets) {this.bullets = bullets;}
-
-    public void setEnemies(List<Enemy> enemies) {this.enemies = enemies;}
-
-    public void setSpawners(List<Spawner> spawners) {this.spawners = spawners;}
-
-    public void setWalls(List<Wall> walls) {this.walls = walls;}
-
-    public void setLayout(Layout layout) {this.layout = layout;}
+    public void initialise() {
+        this.bullets = sceneRepo.bullets;
+        this.enemies = sceneRepo.enemies;
+        this.spawners = sceneRepo.spawners;
+        this.walls = sceneRepo.walls;
+    }
 
     //to be assigned in layout
     protected Player player;
@@ -68,7 +43,6 @@ public class Game extends JFrame {
     //assign in methods
     protected BufferedImage playerImage;
     protected BufferedImage enemyImage;
-    protected BufferedImage bulletImage;
 
     //to be in repository
     protected int sceneWidth = 800;
@@ -79,7 +53,7 @@ public class Game extends JFrame {
         setTitle("DONT DIE");
         setDefaultCloseOperation(EXIT_ON_CLOSE);
 
-        scene = new Scene(backgroundImage);
+        this.scene = sceneRepo.scene;
 
         add(scene);
         pack();
@@ -91,9 +65,8 @@ public class Game extends JFrame {
     }
 
     private void init() {
-        setBullets(sceneRepo.bullets);
+        initialise();
 
-        keyController = new KeyController();
         addKeyListener(keyController);
 
         setScene();
@@ -143,13 +116,13 @@ public class Game extends JFrame {
         enemyGraphics.fillRect(0, 0, 32, 32);
 
         //bullet Image init
-        bulletImage = new BufferedImage(7, 7, BufferedImage.TYPE_INT_RGB);
-        Graphics bulletGraphics = bulletImage.getGraphics();
+        sceneRepo.bulletImage = new BufferedImage(7, 7, BufferedImage.TYPE_INT_RGB);
+        Graphics bulletGraphics = sceneRepo.bulletImage.getGraphics();
         bulletGraphics.setColor(new Color(255, 0, 0));
         bulletGraphics.fillRect(0, 0, 7, 7);
 
         //test wall
-        Wall testWall = new Wall(new Point(0, 0), 30, 80);
+        Wall testWall = new Wall(new Point(300, 300), 30, 80);
         BufferedImage wallImage = new BufferedImage(testWall.getWidth(), testWall.getHeight(), BufferedImage.TYPE_INT_RGB);
         Graphics wallGraphics = wallImage.getGraphics();
         wallGraphics.setColor(new Color(0, 0, 0));
@@ -159,142 +132,11 @@ public class Game extends JFrame {
         walls.add(testWall);
     }
 
-    //playerMethods
-    public int checkPlayerCanMove(Player player) {
-        int count = 0;
-
-        for (Wall wall : walls) {
-            int sideCheckCounter = 0;
-            //if the player is to the right of the wall
-            if (player.getHitBox().intersects(wall.getBox()) &&
-                    player.getHitBox().x/*the leftmost x value of the player*/ <
-                            wall.getBox().x + wall.getBox().width/*the rightmost x value of the wall*/) {
-                sideCheckCounter++;
-                player.setCanMoveLeft(false);
-            }
-            sideCheckCounter++;
-            //if the player is to the left of the wall
-            if (player.getHitBox().intersects(wall.getBox()) &&
-                    player.getHitBox().x + player.getHitBox().width/*the rightmost x value of the player*/ >
-                            wall.getBox().x/*the leftmost x value of the wall*/) {
-                sideCheckCounter++;
-                player.setCanMoveRight(false);
-            }
-            sideCheckCounter++;
-            //if the player is above the wall
-            if (player.getHitBox().intersects(wall.getBox()) &&
-                    player.getHitBox().y - player.getHitBox().height/*the lowest y value of the player*/ <
-                            wall.getBox().y/*the highest y value of the wall*/) {
-                sideCheckCounter++;
-                player.setCanMoveDown(false);
-            }
-            sideCheckCounter++;
-            //if the player is below the wall
-            if (player.getHitBox().intersects(wall.getBox()) &&
-                    player.getHitBox().y > wall.getBox().y + wall.getBox().height) {
-                sideCheckCounter++;
-                player.setCanMoveUp(false);
-            }
-            sideCheckCounter++;
-            if (sideCheckCounter == 4) {
-                count++;
-            }
-        }
-        return count;
-    }
-
-    //playerMethods
-    public void resetPlayer(Player player) {
-        player.setCanMoveLeft(true);
-        player.setCanMoveRight(true);
-        player.setCanMoveUp(true);
-        player.setCanMoveDown(true);
-    }
-
-    //playerMethods
-    public void playerMove(Player player) {
-        //player movement
-        if (keyController.w && player.getCanMoveUp()) {
-            player.move(0, -player.getSpeed());
-        }
-
-        if (keyController.s && player.getCanMoveDown()) {
-            player.move(0, player.getSpeed());
-        }
-
-        if (keyController.a && player.getCanMoveLeft()) {
-            player.move(-player.getSpeed(), 0);
-        }
-
-        if (keyController.d && player.getCanMoveRight()) {
-            player.move(player.getSpeed(), 0);
-        }
-    }
-
-    //playerMethods
-    public void playerShoot() {
-        if ((keyController.left || keyController.up ||
-                keyController.right || keyController.down) && !loopRepo.hasFireCountStarted) {
-
-            if (keyController.left && keyController.up && !hasShot) {
-                makeBullet(5, bulletNumber);
-                bulletNumber++;
-                hasShot = true;
-            }
-            if (keyController.left && keyController.down && !hasShot) {
-                makeBullet(6, bulletNumber);
-                bulletNumber++;
-                hasShot = true;
-            }
-            if (keyController.right && keyController.up && !hasShot) {
-                makeBullet(7, bulletNumber);
-                bulletNumber++;
-                hasShot = true;
-            }
-            if (keyController.right && keyController.down && !hasShot) {
-                makeBullet(8, bulletNumber);
-                bulletNumber++;
-                hasShot = true;
-            }
-            if (keyController.left && !hasShot) {
-                makeBullet(1, bulletNumber);
-                bulletNumber++;
-                hasShot = true;
-            }
-            if (keyController.up && !hasShot) {
-                makeBullet(2, bulletNumber);
-                bulletNumber++;
-                hasShot = true;
-            }
-            if (keyController.right && !hasShot) {
-                makeBullet(3, bulletNumber);
-                bulletNumber++;
-                hasShot = true;
-            }
-            if (keyController.down && !hasShot) {
-                makeBullet(4, bulletNumber);
-                bulletNumber++;
-                hasShot = true;
-            }
-            loopRepo.hasFireCountStarted = true;
-        }
-    }
-
     //enemyMethods
     public void kill(Enemy enemy) {
         scene.removeEntity(enemy);
         enemy.setPosition(new Point(1000, 1000));
         enemy.die();
-    }
-
-    //bulletMethods
-    public void makeBullet(int direction, int bulletNumber) {
-        Bullet bullet = new Bullet("bullet" + bulletNumber,
-                new Point(player.getPosition().x + 16, player.getPosition().y + 16), 3, 3,
-                direction);
-        bullet.setImage(bulletImage);
-        bullets.add(bullet);
-        scene.addEntity(bullet);
     }
 
     public static void main(String[] args) {
@@ -335,23 +177,10 @@ public class Game extends JFrame {
                 });
             }
 
-            //player movement (put in playerMethods as part of one big player movement thing)
-            if (checkPlayerCanMove(player) == walls.size()) {
-                playerMove(player);
-            }
+            //player movement
+            playerMethods.playerMove(player);
 
-            //temp
-            System.out.println(walls.get(0).getBox() + "\n" +
-                    player.getHitBox() + "\n" +
-                    player.getCanMoveLeft() + "\n" +
-                    player.getCanMoveRight() + "\n" +
-                    player.getCanMoveUp() + "\n" +
-                    player.getCanMoveDown() + "\n");
-
-            //as part of player movement logic
-            resetPlayer(player);
-
-            //is fine but make fire count be in a repository
+            //shots can only happen after the fire count has been reset
             if (fireCount == 0) {
                 playerMethods.playerShoot(player);
             }
