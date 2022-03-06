@@ -147,18 +147,12 @@ public class Game extends JFrame {
         enemy.die();
     }
 
-    public static void main(String[] args) {
-        Game game = new Game();
-        game.gameLoop();
-    }
-
-    public static void GameStart(){
+    public static void main(String[] a){
         Game game = new Game();
         game.gameLoop();
     }
 
     public void gameLoop() {
-        //put in level repository
         long timer;
         int restTimer = 0;
         int fireCount = 0;

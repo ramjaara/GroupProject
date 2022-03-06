@@ -21,4 +21,5 @@ public class sceneRepo {
     //images
     public static BufferedImage bulletImage;
 
+    public static boolean isGameRunning;
 }
