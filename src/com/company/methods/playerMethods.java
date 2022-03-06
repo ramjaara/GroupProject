@@ -8,6 +8,8 @@ import com.company.repositories.sceneRepo;
 
 import java.awt.*;
 
+import static com.company.methods.enemyMethods.kill;
+
 public class playerMethods {
 
     public static void playerShoot(Player player) {
@@ -131,5 +133,16 @@ public class playerMethods {
         player.setCanMoveRight(true);
         player.setCanMoveUp(true);
         player.setCanMoveDown(true);
+    }
+
+    public static void playerDamage(Player player){
+        if (loopRepo.damageRestTimer == 10) {
+            sceneRepo.enemies.forEach(Enemy -> {
+                if (player.getHitBox().intersects(Enemy.getHitBox())) {
+                    player.setHealth((float) (player.getHealth() - 0.5));
+                    kill(Enemy);
+                }
+            });
+        }
     }
 }

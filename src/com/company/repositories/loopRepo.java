@@ -16,4 +16,6 @@ public class loopRepo {
     public static boolean left;
     public static boolean right;
 
+    //timers
+    public static int damageRestTimer = 0;
 }

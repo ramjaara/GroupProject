@@ -1,5 +1,7 @@
 package com.company;
 
+import com.company.methods.bulletMethods;
+import com.company.methods.enemyMethods;
 import com.company.methods.playerMethods;
 import com.company.objects.KeyController;
 import com.company.objects.Layout;
@@ -12,8 +14,6 @@ import com.company.panels.Scene;
 import com.company.repositories.loopRepo;
 import com.company.repositories.sceneRepo;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -154,7 +154,6 @@ public class Game extends JFrame {
 
     public void gameLoop() {
         long timer;
-        int restTimer = 0;
         int fireCount = 0;
         int fireRate = 30;
         int spawnRate = 0;
@@ -184,44 +183,18 @@ public class Game extends JFrame {
                 });
             }
 
-            //player movement
+            //movement
             playerMethods.playerMove(player);
+            bulletMethods.bulletMove();
+            enemyMethods.enemyMove(player);
 
             //shots can only happen after the fire count has been reset
             if (fireCount == 0) {
                 playerMethods.playerShoot(player);
             }
 
-            //moves bullets and checks if they have shot an enemy
-            bullets.forEach(Bullet -> {
-                if (Bullet.isMoving()) {
-                    Bullet.movement();
-                    enemies.forEach(Enemy -> {
-                        if (Enemy.getHitBox().intersects(Bullet.getHitBox())) {
-                            kill(Enemy);
-                            Bullet.stop();
-                        }
-                    });
-                }
-            });
-
-            //checks if each enemy is alive then moves them
-            enemies.forEach(Enemy ->
-            {
-                if (Enemy.isAlive()) {
-                    Enemy.movement(player.getPosition().x, player.getPosition().y);
-                }
-            });
-
             //enemy damage for player
-            if (restTimer == 10) {
-                enemies.forEach(Enemy -> {
-                    if (player.getHitBox().intersects(Enemy.getHitBox())) {
-                        player.setHealth((float) (player.getHealth() - 0.5));
-                        kill(Enemy);
-                    }
-                });
-            }
+            playerMethods.playerDamage(player);
 
             //exit clause
             /*if (player.getHealth() <= 0) {
@@ -241,13 +214,13 @@ public class Game extends JFrame {
 
                 }
             }
-            restTimer++;
+            loopRepo.damageRestTimer++;
             spawnRate++;
             if (loopRepo.hasFireCountStarted) {
                 fireCount++;
             }
-            if (restTimer == 20) {
-                restTimer = 0;
+            if (loopRepo.damageRestTimer == 20) {
+                loopRepo.damageRestTimer = 0;
             }
             if (fireCount == fireRate) {
                 fireCount = 0;
