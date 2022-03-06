@@ -12,6 +12,8 @@ import com.company.panels.Scene;
 import com.company.repositories.loopRepo;
 import com.company.repositories.sceneRepo;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -26,7 +28,13 @@ public class Game extends JFrame {
     private List<Spawner> spawners;
     private List<Wall> walls;
     private Layout layout;
-    public KeyController keyController = new KeyController();;
+    public KeyController keyController = new KeyController();
+    ;
+
+    public static void main() {
+        Game game = new Game();
+        game.gameLoop();
+    }
 
     public void initialise() {
         this.bullets = sceneRepo.bullets;
@@ -144,6 +152,11 @@ public class Game extends JFrame {
         game.gameLoop();
     }
 
+    public static void GameStart(){
+        Game game = new Game();
+        game.gameLoop();
+    }
+
     public void gameLoop() {
         //put in level repository
         long timer;
@@ -252,3 +265,4 @@ public class Game extends JFrame {
         }
     }
 }
+
