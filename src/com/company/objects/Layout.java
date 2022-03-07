@@ -21,8 +21,8 @@ import java.util.Scanner;
 //line after has an int type that is passed to the
 //loop repo
 public class Layout {
-    private List<Wall> walls;
-    private List<Spawner> spawners;
+    private List<Wall> walls = new ArrayList<>();
+    private List<Spawner> spawners = new ArrayList<>();
     private String completeClause;
     private File source;
 
@@ -32,9 +32,13 @@ public class Layout {
     }
 
     public static void main(String[] args){
-        Layout layout = new Layout("com/company/layouts/level1");
+        Layout layout = new Layout("src/com/company/layouts/level1");
         layout.populateLayout();
         System.out.println(layout.walls);
+    }
+
+    public void addWall(Wall wall) {
+        this.walls.add(wall);
     }
 
     private void populateLayout() {
@@ -48,12 +52,11 @@ public class Layout {
                     int height = Integer.parseInt(splitFileLine.get(3));
                     int width = Integer.parseInt(splitFileLine.get(4));
                     Wall wall = new Wall(position, height, width);
-                    this.walls.add(wall);
+                    this.addWall(wall);
                 }
             }
-        } catch (Exception e) {
-            System.out.println("There was an error loading layout");
-            System.out.println(e);
+        }catch(Exception e){
+
         }
     }
 }

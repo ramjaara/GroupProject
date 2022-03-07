@@ -14,15 +14,19 @@ public class Wall extends FloorItem {
         this.box = new Rectangle(position.x, position.y, width, height);
     }
 
-    public Rectangle getBox() {
-        return box;
-    }
+    public Rectangle getBox() {return box;}
 
-    public int getHeight() {
-        return height;
-    }
+    public int getHeight() {return height;}
 
-    public int getWidth() {
-        return width;
+    public int getWidth() {return width;}
+
+    @Override
+    public String toString() {
+        return "Wall{" +
+                "position=" + position +
+                ", box=" + box +
+                ", height=" + height +
+                ", width=" + width +
+                '}';
     }
 }
