@@ -29,12 +29,6 @@ public class Game extends JFrame {
     private List<Wall> walls;
     private Layout layout;
     public KeyController keyController = new KeyController();
-    ;
-
-    public static void main() {
-        Game game = new Game();
-        game.gameLoop();
-    }
 
     public void initialise() {
         this.bullets = sceneRepo.bullets;
@@ -45,8 +39,6 @@ public class Game extends JFrame {
 
     //to be assigned in layout
     protected Player player;
-    //protected JLabel healthLabel;
-    //protected JLabel scoreLabel;
 
     //assign in methods
     protected BufferedImage playerImage;
@@ -79,16 +71,7 @@ public class Game extends JFrame {
 
         setScene();
 
-        /*healthLabel = new JLabel("Health:");
-        healthLabel.setOpaque(true);
-
-        scoreLabel = new JLabel("Score:");
-        scoreLabel.setHorizontalTextPosition(SwingConstants.RIGHT);
-        scoreLabel.setOpaque(true);
-
-        scene.add(healthLabel);
-        scene.add(scoreLabel);*/
-        scene.addEntity(player);
+        scene.setPlayer(player);
 
         scene.repaint();
     }
@@ -138,13 +121,6 @@ public class Game extends JFrame {
         testWall.setImage(wallImage);
         scene.addFloorItem(testWall);
         walls.add(testWall);
-    }
-
-    //enemyMethods
-    public void kill(Enemy enemy) {
-        scene.removeEntity(enemy);
-        enemy.setPosition(new Point(1000, 1000));
-        enemy.die();
     }
 
     public static void main(String[] a){

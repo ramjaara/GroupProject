@@ -1,6 +1,7 @@
 package com.company.panels;
 
 import com.company.objects.entities.Entity;
+import com.company.objects.entities.Player;
 import com.company.objects.floorItems.FloorItem;
 
 import java.awt.*;
@@ -13,10 +14,16 @@ public class Scene extends JPanel {
     private int width;
     private int height;
 
+    private Player player;
+
     private List<Entity> entities = new ArrayList<>();
     private List<FloorItem> floorItems = new ArrayList<>();
 
     public void removeEntity(Entity e){entities.remove(e);}
+
+    public void setPlayer(Player player) {
+        this.player = player;
+    }
 
     public Dimension getPrefferredSize(){
         return new Dimension(this.width, this.height);
@@ -28,6 +35,7 @@ public class Scene extends JPanel {
     @Override
     protected void paintComponent(Graphics g){
         super.paintComponent(g);
+        player.draw(g);
         entities.forEach(entity -> entity.draw(g));
         floorItems.forEach(floorItem -> floorItem.draw(g));
     }
