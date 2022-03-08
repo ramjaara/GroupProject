@@ -1,6 +1,5 @@
 package com.company.objects;
 
-import com.company.objects.floorItems.FloorItem;
 import com.company.objects.floorItems.Spawner;
 import com.company.objects.floorItems.Wall;
 
@@ -59,4 +58,5 @@ public class Layout {
 
         }
     }
+
 }
