@@ -18,4 +18,6 @@ public class loopRepo {
 
     //timers
     public static int damageRestTimer = 0;
+    public static int spawnRate = 0;
+
 }

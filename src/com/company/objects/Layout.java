@@ -26,12 +26,12 @@ public class Layout {
     private File source;
 
     public Layout(String location) {
-        source = new File(location);
+        source = new File("src/com/company/layouts/"+location);
         populateLayout();
     }
 
     public static void main(String[] args){
-        Layout layout = new Layout("src/com/company/layouts/level1");
+        Layout layout = new Layout("level1");
         System.out.println(layout.walls);
     }
 

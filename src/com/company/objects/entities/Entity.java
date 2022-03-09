@@ -12,6 +12,10 @@ public class Entity {
     int width;
     Rectangle hitBox = new Rectangle(position.x, position.y,
             width, height);
+    Boolean canMoveUp;
+    Boolean canMoveDown;
+    Boolean canMoveLeft;
+    Boolean canMoveRight;
     protected BufferedImage image;
 
     //empty constructor
@@ -22,6 +26,10 @@ public class Entity {
         this.name = name;
         this.width = width;
         this.height = height;
+        this.canMoveUp = true;
+        this.canMoveDown = true;
+        this.canMoveLeft = true;
+        this.canMoveRight = true;
     }
 
     //bullet constructor
@@ -44,10 +52,6 @@ public class Entity {
 
     public String getName() {
         return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public int getSpeed() {
@@ -76,6 +80,29 @@ public class Entity {
 
     public Rectangle getHitBox() {
         return hitBox;
+    }
+
+    public Boolean getCanMoveUp() {return canMoveUp;}
+
+    public void setCanMoveUp(Boolean canMoveUp) {this.canMoveUp = canMoveUp;}
+
+    public Boolean getCanMoveDown() {return canMoveDown;}
+
+    public void setCanMoveDown(Boolean canMoveDown) {this.canMoveDown = canMoveDown;}
+
+    public Boolean getCanMoveLeft() {return canMoveLeft;}
+
+    public void setCanMoveLeft(Boolean canMoveLeft) {this.canMoveLeft = canMoveLeft;}
+
+    public Boolean getCanMoveRight() {return canMoveRight;}
+
+    public void setCanMoveRight(Boolean canMoveRight) {this.canMoveRight = canMoveRight;}
+
+    public void resetMovement() {
+        this.canMoveLeft = true;
+        this.canMoveRight = true;
+        this.canMoveUp = true;
+        this.canMoveDown = true;
     }
 
     public void setPosition(Point position){

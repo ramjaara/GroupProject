@@ -3,6 +3,7 @@ package com.company;
 import com.company.methods.bulletMethods;
 import com.company.methods.enemyMethods;
 import com.company.methods.playerMethods;
+import com.company.methods.spawnMethods;
 import com.company.objects.KeyController;
 import com.company.objects.Layout;
 import com.company.objects.entities.Bullet;
@@ -66,6 +67,7 @@ public class Game extends JFrame {
 
     private void init() {
         initialise();
+        sceneRepo.initialiseImages();
 
         addKeyListener(keyController);
 
@@ -100,27 +102,23 @@ public class Game extends JFrame {
         player.setImage(playerImage);
         player.setPosition(new Point(400, 400));
 
-        //enemy image init
-        enemyImage = new BufferedImage(32, 32, BufferedImage.TYPE_INT_RGB);
-        Graphics enemyGraphics = enemyImage.getGraphics();
-        enemyGraphics.setColor(new Color(0, 255, 250));
-        enemyGraphics.fillRect(0, 0, 32, 32);
-
-        //bullet Image init
-        sceneRepo.bulletImage = new BufferedImage(7, 7, BufferedImage.TYPE_INT_RGB);
-        Graphics bulletGraphics = sceneRepo.bulletImage.getGraphics();
-        bulletGraphics.setColor(new Color(255, 0, 0));
-        bulletGraphics.fillRect(0, 0, 7, 7);
-
-        //test wall
-        Wall testWall = new Wall(new Point(300, 300), 30, 80);
-        BufferedImage wallImage = new BufferedImage(testWall.getWidth(), testWall.getHeight(), BufferedImage.TYPE_INT_RGB);
+        Wall upperLimitWall = new Wall(new Point(0, 0), 30, 800);
+        BufferedImage wallImage = new BufferedImage(upperLimitWall.getWidth(), upperLimitWall.getHeight(), BufferedImage.TYPE_INT_RGB);
         Graphics wallGraphics = wallImage.getGraphics();
         wallGraphics.setColor(new Color(0, 0, 0));
-        wallGraphics.fillRect(0, 0, testWall.getWidth(), testWall.getHeight());
-        testWall.setImage(wallImage);
-        scene.addFloorItem(testWall);
-        walls.add(testWall);
+        wallGraphics.fillRect(0, 0, upperLimitWall.getWidth(), upperLimitWall.getHeight());
+        upperLimitWall.setImage(wallImage);
+        scene.addFloorItem(upperLimitWall);
+        walls.add(upperLimitWall);
+
+        Wall leftLimitWall = new Wall(new Point(0, 0), 800, 30);
+        BufferedImage upperLimitWallImage = new BufferedImage(leftLimitWall.getWidth(), leftLimitWall.getHeight(), BufferedImage.TYPE_INT_RGB);
+        Graphics leftLimitWallGraphics = upperLimitWallImage.getGraphics();
+        leftLimitWallGraphics.setColor(new Color(0, 0, 0));
+        leftLimitWallGraphics.fillRect(0, 0, leftLimitWall.getWidth(), leftLimitWall.getHeight());
+        leftLimitWall.setImage(upperLimitWallImage);
+        scene.addFloorItem(leftLimitWall);
+        walls.add(leftLimitWall);
     }
 
     public static void main(String[] a){
@@ -132,7 +130,6 @@ public class Game extends JFrame {
         long timer;
         int fireCount = 0;
         int fireRate = 30;
-        int spawnRate = 0;
 
         while (true) {
             timer = System.currentTimeMillis();
@@ -145,19 +142,8 @@ public class Game extends JFrame {
             loopRepo.left = keyController.left;
             loopRepo.right = keyController.right;
 
-            //healthLabel.setText("Health:\n" + player.getHealth());
-            //scoreLabel.setText("Score:" + player.getScore());
-
-            //enemySpawn (put in spawnMethods)
-            if (spawnRate == 0) {
-                spawners.forEach(Spawner -> {
-                    if (Spawner.getAmountCreated() <= Spawner.getSpawnAmount()) {
-                        Enemy enemy = (Enemy) Spawner.spawn(enemyImage);
-                        enemies.add(enemy);
-                        scene.addEntity(enemy);
-                    }
-                });
-            }
+            //enemySpawn
+            spawnMethods.doSpawns();
 
             //movement
             playerMethods.playerMove(player);
@@ -191,7 +177,7 @@ public class Game extends JFrame {
                 }
             }
             loopRepo.damageRestTimer++;
-            spawnRate++;
+            loopRepo.spawnRate++;
             if (loopRepo.hasFireCountStarted) {
                 fireCount++;
             }
@@ -202,8 +188,8 @@ public class Game extends JFrame {
                 fireCount = 0;
                 loopRepo.hasFireCountStarted = false;
             }
-            if (spawnRate == 200) {
-                spawnRate = 0;
+            if (loopRepo.spawnRate == 200) {
+                loopRepo.spawnRate = 0;
             }
         }
     }
