@@ -32,7 +32,6 @@ public class Layout {
 
     public static void main(String[] args){
         Layout layout = new Layout("src/com/company/layouts/level1");
-        layout.populateLayout();
         System.out.println(layout.walls);
     }
 
