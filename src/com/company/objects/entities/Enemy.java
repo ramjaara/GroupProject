@@ -6,7 +6,7 @@ public class Enemy extends Entity {
     public Enemy(String name, int width, int height) {
         super(name, width, height);
         this.health=(float) 5;
-        this.speed = 2;
+        this.speed = 1;
         this.hitBox.width=(width);
         this.hitBox.height=(height);
         this.isAlive = true;

@@ -74,83 +74,50 @@ public class playerMethods {
 
     //movement methods
     public static void playerMove(Player player) {
-        wallMethods.checkEntityCanMove(player);
         move(player);
-        player.resetMovement();
     }
 
     private static void move(Player player) {
         //player movement
         if (loopRepo.w) {
+            wallMethods.checkEntityCanMove(player);
             if (player.getCanMoveUp()) {
                 player.move(0, -player.getSpeed());
             } else {
                 player.move(0, player.getSpeed());
+                player.resetMovement();
             }
         }
 
         if (loopRepo.s) {
+            wallMethods.checkEntityCanMove(player);
             if (player.getCanMoveDown()) {
                 player.move(0, player.getSpeed());
             }else{
                 player.move(0, -player.getSpeed());
+                player.resetMovement();
             }
         }
 
         if (loopRepo.a) {
+            wallMethods.checkEntityCanMove(player);
             if (player.getCanMoveLeft()) {
                 player.move(-player.getSpeed(), 0);
             } else {
                 player.move(player.getSpeed(), 0);
+                player.resetMovement();
             }
         }
 
         if (loopRepo.d) {
+            wallMethods.checkEntityCanMove(player);
             if (player.getCanMoveRight()) {
                 player.move(player.getSpeed(), 0);
             } else {
                 player.move(-player.getSpeed(), 0);
+                player.resetMovement();
             }
         }
-    }
-
-    private static void checkPlayerCanMove(Player player) {
-        for (Wall wall : sceneRepo.walls) {
-            //fix logic
-            //if the player is right of the wall
-            if (player.getHitBox().intersects(wall.getBox()) &&
-                    player.getHitBox().x/*the leftmost x value of the player*/ <
-                            wall.getBox().x + wall.getBox().width/*the rightmost x value of the wall*/) {
-                player.setCanMoveLeft(false);
-            }
-            //if player is left of the wall
-            if (player.getHitBox().intersects(wall.getBox()) &&
-                    player.getHitBox().x + player.getHitBox().width/*the rightmost x value of the player*/ >
-                            wall.getBox().x /*the leftmost x value of the wall*/) {
-                player.setCanMoveRight(false);
-            }
-
-            //player is below wall
-            if (player.getHitBox().intersects(wall.getBox()) &&
-                    player.getHitBox().y/*the leftmost x value of the player*/ <
-                            wall.getBox().y + wall.getBox().height/*the rightmost x value of the wall*/) {
-                player.setCanMoveUp(false);
-            }
-
-            //player is above wall
-            if (player.getHitBox().intersects(wall.getBox()) &&
-                    player.getHitBox().y + player.getHitBox().height/*the leftmost x value of the player*/ >
-                            wall.getBox().y/*the rightmost x value of the wall*/) {
-                player.setCanMoveDown(false);
-            }
-        }
-    }
-
-    private static void resetPlayer(Player player) {
-        player.setCanMoveLeft(true);
-        player.setCanMoveRight(true);
-        player.setCanMoveUp(true);
-        player.setCanMoveDown(true);
     }
 
     //damage method

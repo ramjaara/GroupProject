@@ -2,6 +2,5 @@ To Do:
 Make a layout class that adds everything to the scene panel and different layouts can be swapped in an out based on criteria
 Make gun object and spawn chances for coins
 Make coins
-Make walls less derpy (also breaks game sometimes)
 Make enemy movement slightly more random
 Make enemy movement affected by walls

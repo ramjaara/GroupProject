@@ -1,7 +1,6 @@
 package com.company.methods;
 
 import com.company.objects.entities.Entity;
-import com.company.objects.entities.Player;
 import com.company.objects.floorItems.Wall;
 import com.company.repositories.sceneRepo;
 
@@ -13,27 +12,27 @@ public class wallMethods {
             if (entity.getHitBox().intersects(wall.getBox()) &&
                     entity.getHitBox().x/*the leftmost x value of the player*/ <
                             wall.getBox().x + wall.getBox().width/*the rightmost x value of the wall*/) {
-                entity.setCanMoveLeft(false);
+                entity.ifHitsWall("right");
             }
             //if player is left of the wall
             if (entity.getHitBox().intersects(wall.getBox()) &&
                     entity.getHitBox().x + entity.getHitBox().width/*the rightmost x value of the player*/ >
                             wall.getBox().x /*the leftmost x value of the wall*/) {
-                entity.setCanMoveRight(false);
+                entity.ifHitsWall("left");
             }
 
             //player is below wall
             if (entity.getHitBox().intersects(wall.getBox()) &&
                     entity.getHitBox().y/*the leftmost x value of the player*/ <
                             wall.getBox().y + wall.getBox().height/*the rightmost x value of the wall*/) {
-                entity.setCanMoveUp(false);
+                entity.ifHitsWall("down");
             }
 
             //player is above wall
             if (entity.getHitBox().intersects(wall.getBox()) &&
                     entity.getHitBox().y + entity.getHitBox().height/*the leftmost x value of the player*/ >
                             wall.getBox().y/*the rightmost x value of the wall*/) {
-                entity.setCanMoveDown(false);
+                entity.ifHitsWall("up");
             }
         }
     }

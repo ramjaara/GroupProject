@@ -121,5 +121,7 @@ public class Entity {
         this.hitBox.x = this.position.x;
         this.hitBox.y = this.position.y;
     }
+
+    public void ifHitsWall(String direction){}
 }
 
