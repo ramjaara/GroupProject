@@ -43,7 +43,6 @@ public class Game extends JFrame {
 
     //assign in methods
     protected BufferedImage playerImage;
-    protected BufferedImage enemyImage;
 
     //to be in repository
     protected int sceneWidth = 800;
@@ -68,6 +67,7 @@ public class Game extends JFrame {
     private void init() {
         initialise();
         sceneRepo.initialiseImages();
+        this.playerImage = sceneRepo.playerImage;
 
         addKeyListener(keyController);
 
@@ -95,10 +95,6 @@ public class Game extends JFrame {
 
         //player
         player = new Player("alonso", 32, 32);
-        playerImage = new BufferedImage(player.getWidth(), player.getHeight(), BufferedImage.TYPE_INT_RGB);
-        Graphics playerGraphics = playerImage.getGraphics();
-        playerGraphics.setColor(new Color(255, 0, 255));
-        playerGraphics.fillRect(0, 0, 32, 32);
         player.setImage(playerImage);
         player.setPosition(new Point(400, 400));
 

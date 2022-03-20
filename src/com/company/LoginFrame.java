@@ -6,6 +6,8 @@ package com.company;
 //i made the password Ramjaarp
 //this is temporary until i can figure out how to get the scene switching working then ill work on the login again
 
+import com.company.repositories.decisionRepo;
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.*;
@@ -20,15 +22,6 @@ public class LoginFrame extends JFrame implements ActionListener {
     private JButton loginButton = new JButton("LOGIN");
     private JButton resetButton = new JButton("RESET");
     private JCheckBox showPassword = new JCheckBox("Show Password");
-    private boolean canGameRun = false;
-
-    public void gameCanRun(){
-        this.canGameRun = true;
-    }
-
-    public boolean CanGameRun() {
-        return canGameRun;
-    }
 
     LoginFrame() {
         this.setTitle("Login Form");
@@ -42,7 +35,9 @@ public class LoginFrame extends JFrame implements ActionListener {
         addActionEvent();
     }
 
-    public void setLayoutManager() {container.setLayout(null);}
+    public void setLayoutManager() {
+        container.setLayout(null);
+    }
 
     public void setLocationAndSize() {
         userLabel.setBounds(50, 150, 100, 30);
@@ -70,6 +65,10 @@ public class LoginFrame extends JFrame implements ActionListener {
         showPassword.addActionListener(this);
     }
 
+    public void killWindow() {
+        this.dispose();
+    }
+
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == loginButton) {
@@ -80,7 +79,8 @@ public class LoginFrame extends JFrame implements ActionListener {
 
             if (userText.equalsIgnoreCase("Ramjaar") && pwdText.equalsIgnoreCase("RamjaarP")) {
                 JOptionPane.showMessageDialog(this, "Login Successful");
-                runGame();
+                decisionRepo.startGame = true;
+                killWindow();
             } else {
                 JOptionPane.showMessageDialog(this, "Invalid Username or Password");
             }
@@ -97,10 +97,6 @@ public class LoginFrame extends JFrame implements ActionListener {
                 passwordField.setEchoChar('*');
             }
         }
-    }
-    private static void runGame() {
-        Game game = new Game();
-        game.gameLoop();
     }
 }
 

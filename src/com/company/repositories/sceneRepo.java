@@ -22,6 +22,7 @@ public class sceneRepo {
     //images
     public static BufferedImage bulletImage;
     public static BufferedImage enemyImage;
+    public static BufferedImage playerImage;
 
     public static void initialiseImages(){
         //bullet Image init
@@ -35,6 +36,12 @@ public class sceneRepo {
         Graphics enemyGraphics = enemyImage.getGraphics();
         enemyGraphics.setColor(new Color(0, 255, 250));
         enemyGraphics.fillRect(0, 0, 32, 32);
+
+        //player image init
+        playerImage = new BufferedImage(32, 32, BufferedImage.TYPE_INT_RGB);
+        Graphics playerGraphics = playerImage.getGraphics();
+        playerGraphics.setColor(new Color(255, 0, 255));
+        playerGraphics.fillRect(0, 0, 32, 32);
     }
 
 }

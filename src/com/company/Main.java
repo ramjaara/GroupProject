@@ -1,19 +1,26 @@
 package com.company;
 
-public class Main {
+import com.company.repositories.decisionRepo;
+
+public class Main extends Thread {
+
     public static void main(String[] a) {
-        boolean gameRunning = false;
+        Main thread = new Main();
+        thread.start();
         LoginFrame frame = new LoginFrame();
-        while(true){
-            if(frame.CanGameRun()){
-                gameRunning = true;
-                break;
+    }
+
+    public void run() {
+        while (true) {
+            if (decisionRepo.startGame) {
+                runGame();
             }
         }
-        if(gameRunning){
-            Game game = new Game();
-            game.gameLoop();
-        }
+    }
+
+    public static void runGame() {
+        Game game = new Game();
+        game.gameLoop();
     }
 }
 
